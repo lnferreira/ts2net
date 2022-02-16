@@ -73,3 +73,22 @@ dist_matrix_normalize <- function(dist_matrix, to=c(0,1)) {
     rownames(distNorm) = rownames(dist_matrix)
     distNorm
 }
+
+
+#' Correlation distance
+#'
+#' @param ts1 Array. Time series 1
+#' @param ts2 Array. Time series 2
+#' @param positive_cor Boolean. If TRUE (default), only positive correlations are considered.
+#' If FALSE, only negative correlations are considered.
+#'
+#' @return Real value [0,1] where 0 means perfect positive (or negative
+#' if positive_cor==F) correlation and 1 no positive (or negative
+#' if positive_cor==F) correlation.
+#' @export
+tsdist_cor <- function(ts1, ts2, positive_cor=TRUE) {
+    r = cor(ts1, ts2)
+    if (!positive_cor)
+        r = r * -1
+    1 - pmax(0, r)
+}
