@@ -7,7 +7,7 @@
 #' @param x_max Float. Max x value in sin(x) or cor(x).
 #' @param ts_length Integer. Time series length.
 #' @param jitter_amount Float. The total amount of jitter added to each time series.
-#' @param return_x_values Boolean. If positive (default), returns a list of
+#' @param return_x_values Boolean. If positive, returns a list of
 #' data frames with x and y values.
 #'
 #' @return A list with all time series. First the num_sin_series sine time series
@@ -15,7 +15,7 @@
 #' @export
 dataset_sincos_generate <- function(num_sin_series = 25, num_cos_series = 25,
                                     x_max = 8 * pi, ts_length = 100,
-                                    jitter_amount = 0.1, return_x_values=TRUE) {
+                                    jitter_amount = 0.1, return_x_values=FALSE) {
     x = seq(0, x_max, length.out=ts_length)
     sin_tss = list()
     cos_tss = list()

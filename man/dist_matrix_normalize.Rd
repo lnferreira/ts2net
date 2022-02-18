@@ -2,12 +2,12 @@
 % Please edit documentation in R/ts_dist.R
 \name{dist_matrix_normalize}
 \alias{dist_matrix_normalize}
-\title{Normalize a distance/similarity matrix}
+\title{Normalize a distance/similarity matrix.}
 \usage{
-dist_matrix_normalize(dist_matrix, to = c(0, 1))
+dist_matrix_normalize(D, to = c(0, 1))
 }
 \arguments{
-\item{dist_matrix}{Distance/similarity matrix}
+\item{D}{Distance/similarity matrix}
 
 \item{to}{An array of two elements c(min_value, max_value) representing
 the interval where the elements of dist_matrix will be normalized to.}
@@ -16,5 +16,5 @@ the interval where the elements of dist_matrix will be normalized to.}
 Normalized matrix
 }
 \description{
-Normalize a distance/similarity matrix
+Normalize a distance/similarity matrix.
 }

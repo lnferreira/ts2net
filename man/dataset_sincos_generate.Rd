@@ -11,7 +11,7 @@ dataset_sincos_generate(
   x_max = 8 * pi,
   ts_length = 100,
   jitter_amount = 0.1,
-  return_x_values = TRUE
+  return_x_values = FALSE
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ dataset_sincos_generate(
 
 \item{jitter_amount}{Float. The total amount of jitter added to each time series.}
 
-\item{return_x_values}{Boolean. If positive (default), returns a list of
+\item{return_x_values}{Boolean. If positive, returns a list of
 data frames with x and y values.}
 }
 \value{

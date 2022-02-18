@@ -24,7 +24,7 @@
 #'     corresponds to distance or similarity value between time series
 #'     i and j.
 #' @export
-dist_parallel <- function(tsList, measureFunc=tsdiss_euclidean, isSymetric=TRUE,
+ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
                           error_value=NaN, warn_error=TRUE, num_cores=1, ...) {
     measureFuncCompiled <- compiler::cmpfun(measureFunc)
     tsListLength = length(tsList)
@@ -55,27 +55,50 @@ dist_parallel <- function(tsList, measureFunc=tsdiss_euclidean, isSymetric=TRUE,
     dist_matrix
 }
 
-#' Normalize a distance/similarity matrix
+
+#' Normalize a distance/similarity matrix.
 #'
-#' @param dist_matrix Distance/similarity matrix
+#' @param D Distance/similarity matrix
 #' @param to An array of two elements c(min_value, max_value) representing
 #'    the interval where the elements of dist_matrix will be normalized to.
 #'
 #' @return Normalized matrix
 #' @export
-dist_matrix_normalize <- function(dist_matrix, to=c(0,1)) {
-    distNorm = matrix(0, nrow(dist_matrix), ncol(dist_matrix))
-    d = dist_matrix[upper.tri(dist_matrix)]
+dist_matrix_normalize <- function(D, to=c(0,1)) {
+    distNorm = matrix(0, nrow(D), ncol(D))
+    d = D[upper.tri(D)]
     d = scales::rescale(d, to = to)
     distNorm[upper.tri(distNorm)] = d
     distNorm = distNorm + t(distNorm)
-    colnames(distNorm) = colnames(dist_matrix)
-    rownames(distNorm) = rownames(dist_matrix)
+    colnames(distNorm) = colnames(D)
+    rownames(distNorm) = rownames(D)
     distNorm
 }
 
 
-#' Correlation distance
+#' Returns the distance value that corresponds to the desired percentile. This function
+#' is useful when the user wants to generate networks with different distance functions
+#' but with the same link density.
+#'
+#' @param D distance matrix
+#' @param percentile (Float) The desired percentile of lower distances.
+#' @param is_D_symetric (Boolean)
+#'
+#' @return Distance percentile value.
+#' @export
+dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {
+    D[is.na(D)] = +Inf
+    d = D
+    if (is_D_symetric){
+        d = D[upper.tri(D)]
+    } else {
+        d = D[upper.tri(D) | lower.tri(D)]
+    }
+    quantile(d, probs = c(percentile))
+}
+
+
+#' Correlation distance.
 #'
 #' @param ts1 Array. Time series 1
 #' @param ts2 Array. Time series 2

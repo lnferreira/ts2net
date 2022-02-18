@@ -2,7 +2,7 @@
 % Please edit documentation in R/ts_dist.R
 \name{tsdist_cor}
 \alias{tsdist_cor}
-\title{Correlation distance}
+\title{Correlation distance.}
 \usage{
 tsdist_cor(ts1, ts2, positive_cor = TRUE)
 }
@@ -20,5 +20,5 @@ if positive_cor==F) correlation and 1 no positive (or negative
 if positive_cor==F) correlation.
 }
 \description{
-Correlation distance
+Correlation distance.
 }
