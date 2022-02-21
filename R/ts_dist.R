@@ -35,7 +35,7 @@ ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
         combs = as.matrix(expand.grid(1:tsListLength, 1:tsListLength))
         combs = lapply(1:nrow(combs), function(i) combs[i,])
     }
-    dists = parallel::mclapply(combs, function(ids){
+    dists = mclapply(combs, function(ids){
         tryCatch({
             measureFuncCompiled(tsList[[ids[1]]], tsList[[ids[2]]], ...)
         }, error=function(cond) {

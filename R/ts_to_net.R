@@ -42,11 +42,11 @@ net_epsilon_create <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
     if (weighted)
         net_weighted = TRUE
     if (bipartite) {
-        net = igraph::graph.incidence(n, weighted = net_weighted, directed = !is_dist_symetric,
-                                      mode = bipartite_mode)
+        net = graph.incidence(n, weighted = net_weighted, directed = !is_dist_symetric,
+                              mode = bipartite_mode)
     } else {
-        net = igraph::graph.adjacency(n, mode=ifelse(is_dist_symetric, "undirected", "directed"),
-                                      weighted = net_weighted, diag=F)
+        net = graph.adjacency(n, mode=ifelse(is_dist_symetric, "undirected", "directed"),
+                              weighted = net_weighted, diag=F)
     }
     net
 }
