@@ -115,3 +115,18 @@ tsdist_cor <- function(ts1, ts2, positive_cor=TRUE) {
         r = r * -1
     1 - pmax(0, r)
 }
+
+
+#' Dynamic Time Warping (DTW) distance.
+#'
+#' This function is a wrapper for the dtw() function from the dtw package.
+#'
+#' @param ts1 Array. Time series 1
+#' @param ts2 Array. Time series 2
+#'
+#' @return DTW distance
+#' @importFrom dtw dtw
+#' @export
+tsdist_dtw <- function(ts1, ts2) {
+    dtw(ts1,ts2)$distance
+}

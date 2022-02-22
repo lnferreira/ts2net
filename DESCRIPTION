@@ -5,10 +5,12 @@ Version: 0.1.0
 Author: Leonardo N. Ferreira <ferreira@leonardonascimento.com>
 Maintainer: Leonardo N. Ferreira <ferreira@leonardonascimento.com>
 Description: A package to transform time series into networks
-License: MIT + file LICENSE
+License: MIT 
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
 Depends:
-    igraph
+    igraph,
     parallel
+Imports:
+    dtw
