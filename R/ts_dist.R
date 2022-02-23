@@ -100,6 +100,23 @@ dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {
 
 #' Correlation distance.
 #'
+#' Calculates 1 - abs(cor(ts1, ts2)). Different from tsdist_cor, this distance
+#' considers both strong positive and negative correlations. Zero means no
+#' correlation.
+#'
+#' @param ts1 Array. Time series 1
+#' @param ts2 Array. Time series 2
+#'
+#' @return Real value [0,1] where 0 means perfect positive or negative correlation
+#' and 1 no  correlation.
+#' @export
+tsdist_cor_abs <- function(ts1, ts2) {
+    1 - abs(cor(ts1, ts2))
+}
+
+
+#' Correlation distance.
+#'
 #' @param ts1 Array. Time series 1
 #' @param ts2 Array. Time series 2
 #' @param positive_cor Boolean. If TRUE (default), only positive correlations are considered.
