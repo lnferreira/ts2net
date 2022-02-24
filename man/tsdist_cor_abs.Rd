@@ -2,7 +2,7 @@
 % Please edit documentation in R/ts_dist.R
 \name{tsdist_cor_abs}
 \alias{tsdist_cor_abs}
-\title{Correlation distance.}
+\title{Absolute correlation distance.}
 \usage{
 tsdist_cor_abs(ts1, ts2)
 }

@@ -98,7 +98,7 @@ dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {
 }
 
 
-#' Correlation distance.
+#' Absolute correlation distance.
 #'
 #' Calculates 1 - abs(cor(ts1, ts2)). Different from tsdist_cor, this distance
 #' considers both strong positive and negative correlations. Zero means no
@@ -115,7 +115,10 @@ tsdist_cor_abs <- function(ts1, ts2) {
 }
 
 
-#' Correlation distance.
+#' Positive or negative correlation distance.
+#'
+#' Perfect positive returns zero and one means no  or negative correlations. The
+#' opposite occurs if positive_cor==F.
 #'
 #' @param ts1 Array. Time series 1
 #' @param ts2 Array. Time series 2
@@ -131,6 +134,48 @@ tsdist_cor <- function(ts1, ts2, positive_cor=TRUE) {
     if (!positive_cor)
         r = r * -1
     1 - pmax(0, r)
+}
+
+
+#' Cross-correlation distance
+#'
+#' Minimum correlation distance considering a +- lag máxium (lag_max)
+#'
+#' @param ts1 Array. Time series 1
+#' @param ts2 Array. Time series 2
+#' @param type String. "correlation" or "covariance" to be used (type) in the ccf function.
+#' @param cor_type String. "abs" (default), "positive", or "negative". "Abs" considers the
+#'   correlation absolute value. "positive" only positve correlations and "negative" only
+#'   negative correlations.
+#' @param directed Boolean. If FALSE (default), the lag interval [-lag_max,+lag_max] is
+#'   considered. Otherwise, [-lag_max,0] is considered.
+#' @param lag_max Integer. Default = 10.
+#' @param return_lag Also returns the time lag that leads to the shortest distances.
+#'
+#' @return Distance
+#' @export
+tsdist_ccf <- function(ts1, ts2, type=c("correlation", "covariance"),
+                                    cor_type="abs",
+                                    directed=F, lag_max = 10, return_lag=F) {
+    cc = ccf(ts1, ts2, lag.max = lag_max, plot = F, type = type[1])
+    cc_acfs = cc$acf[,,1]
+    cc_lags = cc$lag[,,1]
+    if (directed) {
+        cc_acfs = cc_acfs[cc_lags <= 0]
+        cc_lags = cc_lags[cc_lags <= 0]
+    }
+    if (cor_type == "positive")
+        cc_acfs[cc_acfs < 0] = 0
+    if (cor_type == "negative")
+        cc_acfs[cc_acfs > 0] = 0
+    cc_acfs = abs(cc_acfs)
+    cc_max_index = which.max(cc_acfs)
+    cc_max = cc_acfs[cc_max_index]
+    cc_max_lag = cc_lags[cc_max_index]
+    dist = 1 - abs(cc_max)
+    if (return_lag)
+        dist = data.frame(dist=dist, lag=cc_max_lag)
+    dist
 }
 
 
