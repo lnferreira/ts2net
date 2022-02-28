@@ -185,10 +185,11 @@ tsdist_ccf <- function(ts1, ts2, type=c("correlation", "covariance"),
 #'
 #' @param ts1 Array. Time series 1
 #' @param ts2 Array. Time series 2
+#' @param ... Additional parameters for the dtw() function from the dtw package.
 #'
 #' @return DTW distance
 #' @importFrom dtw dtw
 #' @export
-tsdist_dtw <- function(ts1, ts2) {
-    dtw(ts1,ts2)$distance
+tsdist_dtw <- function(ts1, ts2, ...) {
+    dtw(ts1,ts2, ...)$distance
 }

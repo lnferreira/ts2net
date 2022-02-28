@@ -4,12 +4,14 @@
 \alias{tsdist_dtw}
 \title{Dynamic Time Warping (DTW) distance.}
 \usage{
-tsdist_dtw(ts1, ts2)
+tsdist_dtw(ts1, ts2, ...)
 }
 \arguments{
 \item{ts1}{Array. Time series 1}
 
 \item{ts2}{Array. Time series 2}
+
+\item{...}{Additional parameters for the dtw() function from the dtw package.}
 }
 \value{
 DTW distance
