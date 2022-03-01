@@ -27,6 +27,9 @@ net_epsilon_create <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
     n = matrix(0, nrow(D), ncol(D))
     if (weighted) {
         if (invert_dist_as_weight) {
+            if(any(D > 1))
+                stop("When invert_dist_as_weight is TRUE, the edge weight is 1 - d. In this case,
+                     all values in the distance matrix D should be in the interval [0,1]. ")
             n[D <= epsilon] = 1 - D[D <= epsilon]
         } else {
             n[D <= epsilon] = D[D <= epsilon]
@@ -49,6 +52,21 @@ net_epsilon_create <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
                               weighted = net_weighted, diag=F)
     }
     net
+}
+
+#' Creates a weighted fully connected network.
+#'
+#' @param D Distance matrix
+#' @param invert_dist_as_weight Boolean, if weighted == TRUE, then the weights
+#'     become 1 - distance. This is the default behavior since most network
+#'     measures interpret higher weights as stronger connection. If TRUE,
+#'     the distance matrix D should contain only value in the interval [0,1].
+#'
+#' @return Fully connected network
+#' @export
+net_full_weighted <- function(D, invert_dist_as_weight=TRUE) {
+    net_epsilon_create(D = D, epsilon = +Inf, weighted = TRUE,
+                       invert_dist_as_weight = invert_dist_as_weight)
 }
 
 
