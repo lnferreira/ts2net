@@ -54,17 +54,18 @@ net_epsilon_create <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
     net
 }
 
-#' Creates a weighted fully connected network.
+#' Creates a weighted network.
 #'
-#' @param D Distance matrix
-#' @param invert_dist_as_weight Boolean, if weighted == TRUE, then the weights
-#'     become 1 - distance. This is the default behavior since most network
-#'     measures interpret higher weights as stronger connection. If TRUE,
-#'     the distance matrix D should contain only value in the interval [0,1].
+#' A link is created for each pair of nodes, except if the distance is
+#' maximum (1). In network science, stronger links are commonly represented
+#' by high values. For this reason, the link weights returned are 1 - D.
+#'
+#' @param D Distance matrix. All values must be between [0,1].
+#' @param max_dist_value. The value
 #'
 #' @return Fully connected network
 #' @export
-net_full_weighted <- function(D, invert_dist_as_weight=TRUE) {
+net_weighted <- function(D, invert_dist_as_weight=TRUE) {
     net_epsilon_create(D = D, epsilon = +Inf, weighted = TRUE,
                        invert_dist_as_weight = invert_dist_as_weight)
 }
