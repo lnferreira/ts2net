@@ -55,6 +55,84 @@ ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
     dist_matrix
 }
 
+#' Calculate distances between pairs of time series in part of a list.
+#'
+#' This function is particularly useful to run in parallel as jobs in a
+#' cluster (HPC). It returns a data frame with elements (i,j) and a distance
+#' value calculated for the time series i and j. Not all the elements are
+#' calculated but just a a part of the total combinations of time series in the
+#' list. This function load all the time series in the memory to make the
+#' calculations faster. However, if the time series are too long and/or the
+#' dataset is huge, it might represent a memory problem. In this case,
+#' dist_dir_parallel() is more recommended.
+#'
+#' @param tsList List of time series.
+#' @param num_part Numeric positive between 1 and the total number of parts
+#'     (num_total_parts). This value corresponds to the part (chunck) of the
+#'     total number of parts to be calculated.
+#' @param num_total_parts Numeric positive corresponding the total number of
+#'     parts.
+#' @param combinations A list composed by arrays of size 2 indicating the
+#'     files indices to be compared. If this parameter is passed, then
+#'     the function does not split all the possibilities and does not use
+#'     the parameters num_part and num_total_parts. This parameter is useful
+#'     when the number of combinations is very high and this functions is
+#'     called several times (high num_total_parts). In this case, instead of
+#'     calculating all the combinations in each call, the user can calculate
+#'     it once and pass it via this parameter.
+#' @param measureFunc Function to be applied to all combinations
+#'     of time series. This function should have at least two parameters
+#'     for each time series. Ex: function(ts1, ts2){ cor(ts1, ts2) }
+#' @param isSymetric Boolean. If the distance function is symmetric.
+#' @param num_cores Numeric. Number of cores
+#' @param simplify Boolean. If FALSE (default), returns a list of one (
+#'     if isSymetric == FALSE) or two elements (if isSymetric == TRUE).
+#' @param error_value The value returned if an error occur when calculating a
+#'     the distance for a pair of time series.
+#' @param warn_error Boolean. If TRUE (default), a warning will rise when an
+#'     error occur during the calculations.
+#' @param ... Additional parameters for measureFunc
+#'
+#' @return A data frame with elements (i,j) and a distance value calculated
+#'     for the time series i and j.
+#' @export
+tsdist_parts_parallel <- function(tsList, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
+                                isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=FALSE,
+                                num_cores=1, ...) {
+    measureFuncCompiled <- compiler::cmpfun(measureFunc)
+    tsListLength = length(tsList)
+    combs = c()
+    if (missing(combinations)) {
+        if (isSymetric){
+            combs = combn(tsListLength, 2, simplify = FALSE)
+        } else {
+            combs = as.matrix(expand.grid(1:tsListLength, 1:tsListLength))
+            combs = lapply(1:nrow(combs), function(i) combs[i,])
+        }
+        combs = split(combs, ceiling(seq_along(combs)/(length(combs) / num_total_parts)))[[num_part]]
+    } else {
+        combs = combinations
+    }
+    dists = parallel::mclapply(combs, function(ids){
+        d = tryCatch({
+            measureFuncCompiled(tsList[[ids[1]]], tsList[[ids[2]]], ...)
+        }, error=function(cond) {
+            if (warn_error)
+                warning("Error when calculating distance between time series ", ids[1], " and ", ids[2])
+            error_value
+        })
+        if (isSymetric){
+            r = data.frame(i=c(ids[1], ids[2]), j=c(ids[2], ids[1]) , dist=rep(d, 2))
+        } else {
+            r = data.frame(i=ids[1], j=ids[2], dist=d)
+        }
+        r
+    }, mc.cores = num_cores)
+    if (simplify)
+        dists = do.call(rbind, dists)
+    dists
+}
+
 
 #' Normalize a distance/similarity matrix.
 #'
