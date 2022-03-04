@@ -141,11 +141,12 @@ tsdist_parts_parallel <- function(tsList, num_part, num_total_parts, combination
 #'    the interval where the elements of dist_matrix will be normalized to.
 #'
 #' @return Normalized matrix
+#' @importFrom scales rescale
 #' @export
 dist_matrix_normalize <- function(D, to=c(0,1)) {
     distNorm = matrix(0, nrow(D), ncol(D))
     d = D[upper.tri(D)]
-    d = scales::rescale(d, to = to)
+    d = rescale(d, to = to)
     distNorm[upper.tri(distNorm)] = d
     distNorm = distNorm + t(distNorm)
     colnames(distNorm) = colnames(D)

@@ -13,4 +13,5 @@ Depends:
     igraph,
     parallel
 Imports:
-    dtw
+    dtw,
+    scales
