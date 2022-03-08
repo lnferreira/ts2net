@@ -139,9 +139,9 @@ tsdist_parts_parallel <- function(tsList, num_part, num_total_parts, combination
 #'
 #' This function works similarly as dist_parts_parallel(). The difference is that it
 #' reads the time series from RDS files in a directory. The advantage of this approach
-#' is that it does not loads of the time series in memory but reads them only when
+#' is that it does not load all the time series in memory but reads them only when
 #' necessary. This means that this function requires much less memory and should be
-#' preferred when memory consumption is a concern, e.g., huge dataset or very long
+#' preferred when memory consumption is a concern, e.g., huge data set or very long
 #' time series. The disadvantage of this approach is that it requires a high number of
 #' file read operations which considerably takes more time during the calculations.
 #' IMPORTANT: the file order is very important so it is highly recommended to use
@@ -214,6 +214,65 @@ tsdist_dir_parallel <- function(input_dir, num_part, num_total_parts, combinatio
     if (simplify)
         dists = do.call(rbind, dists)
     dists
+}
+
+
+#' Merge parts of distances stored in files.
+#'
+#' The functions tsdist_dir_parallel and tsdist_parts_parallel calculates part of
+#' the distance matrix D. The results of the multiple calls of these functions are
+#' normally stored in RDS or csv files. This function merges these files and construct
+#' a distance matrix D.
+#'
+#' @param list_files A list of files with distances.
+#' @param dir_path If list_files was not passed, than this function uses this parameter
+#'   to read the files in this directory.
+#' @param num_elements The number of time series in the data set. The number of elements
+#'   defines the number of rows ans columns in the distance matrix D.
+#' @param file_type The extension of the files where the distances are stored. It can be
+#'   "RDS" (default) or "csv". The RDS files should be data frames composed by three
+#'   columns i,j, and dist. This format is preferred because it is a compact file. The other
+#'   option is a "csv" also containing the i,j, and dist columns.
+#'
+#' @return Distance matrix D
+#' @export
+tsdist_file_parts_merge <- function(list_files, dir_path, num_elements, file_type="RDS") {
+    if (missing(list_files))
+        files = list.files(dir_path, pattern = file_type, include.dirs = F, full.names = T)
+    D = matrix(1, num_elements, num_elements)
+    for (file in files) {
+        if (file_type == "RDS") {
+            df_d = readRDS(file)
+        } else {
+            df_d = read.csv(file, row.names = F)
+        }
+        if (class(df_d) == "list")
+            df_d = do.call(rbind, df_d)
+        D[as.matrix(df_d[,c("i", "j")])] = df_d$dist
+    }
+    D
+}
+
+
+#' Merge parts of distances stored in data frames.
+#'
+#' The functions tsdist_dir_parallel and tsdist_parts_parallel calculates part of
+#' the distance matrix D. This function merges these files and construct
+#' a distance matrix D.
+#'
+#' @param list_dfs A list of data frames. Each data frame should have three
+#'   columns i,j, and dist.
+#' @param num_elements The number of time series in the data set. The number of elements
+#'   defines the number of rows ans columns in the distance matrix D.
+#'
+#' @return Distance matrix D
+#' @export
+tsdist_parts_merge <- function(list_dfs, num_elements) {
+    D = matrix(1, num_elements, num_elements)
+    for (df_d in list_dfs) {
+        D[as.matrix(df_d[,c("i", "j")])] = df_d$dist
+    }
+    D
 }
 
 
