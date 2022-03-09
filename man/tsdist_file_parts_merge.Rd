@@ -24,7 +24,7 @@ option is a "csv" also containing the i,j, and dist columns.}
 Distance matrix D
 }
 \description{
-The functions tsdist_dir_parallel and tsdist_parts_parallel calculates part of
+The functions tsdist_dir_parallel and tsdist_parts_parallel calculate part of
 the distance matrix D. The results of the multiple calls of these functions are
 normally stored in RDS or csv files. This function merges these files and construct
 a distance matrix D.

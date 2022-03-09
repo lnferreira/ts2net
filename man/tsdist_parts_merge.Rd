@@ -17,7 +17,7 @@ defines the number of rows ans columns in the distance matrix D.}
 Distance matrix D
 }
 \description{
-The functions tsdist_dir_parallel and tsdist_parts_parallel calculates part of
+The functions tsdist_dir_parallel and tsdist_parts_parallel calculate part of
 the distance matrix D. This function merges these files and construct
 a distance matrix D.
 }

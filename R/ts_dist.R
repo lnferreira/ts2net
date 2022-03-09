@@ -23,7 +23,7 @@
 #' @return A distance or similarity matrix M whose position M_{ij}
 #'     corresponds to distance or similarity value between time series
 #'     i and j.
-#' @import compiler cmpfun
+#' @importFrom compiler cmpfun
 #' @export
 ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
                           error_value=NaN, warn_error=TRUE, num_cores=1, ...) {
@@ -96,7 +96,7 @@ ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
 #'
 #' @return A data frame with elements (i,j) and a distance value calculated
 #'     for the time series i and j.
-#' @import compiler cmpfun
+#' @importFrom compiler cmpfun
 #' @export
 tsdist_parts_parallel <- function(tsList, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
                                 isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE,
@@ -174,7 +174,7 @@ tsdist_parts_parallel <- function(tsList, num_part, num_total_parts, combination
 #'     for the time series i and j. Each index corresponds to the order
 #'     where the files are listed.
 #'
-#' @import compiler cmpfun
+#' @importFrom compiler cmpfun
 #' @export
 tsdist_dir_parallel <- function(input_dir, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
                               isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=FALSE,
@@ -217,9 +217,32 @@ tsdist_dir_parallel <- function(input_dir, num_part, num_total_parts, combinatio
 }
 
 
+
+#' Merge parts of distances stored in data frames.
+#'
+#' The functions tsdist_dir_parallel and tsdist_parts_parallel calculate part of
+#' the distance matrix D. This function merges these files and construct
+#' a distance matrix D.
+#'
+#' @param list_dfs A list of data frames. Each data frame should have three
+#'   columns i,j, and dist.
+#' @param num_elements The number of time series in the data set. The number of elements
+#'   defines the number of rows ans columns in the distance matrix D.
+#'
+#' @return Distance matrix D
+#' @export
+tsdist_parts_merge <- function(list_dfs, num_elements) {
+    D = matrix(1, num_elements, num_elements)
+    for (df_d in list_dfs) {
+        D[as.matrix(df_d[,c("i", "j")])] = df_d$dist
+    }
+    D
+}
+
+
 #' Merge parts of distances stored in files.
 #'
-#' The functions tsdist_dir_parallel and tsdist_parts_parallel calculates part of
+#' The functions tsdist_dir_parallel and tsdist_parts_parallel calculate part of
 #' the distance matrix D. The results of the multiple calls of these functions are
 #' normally stored in RDS or csv files. This function merges these files and construct
 #' a distance matrix D.
@@ -248,28 +271,6 @@ tsdist_file_parts_merge <- function(list_files, dir_path, num_elements, file_typ
         }
         if (class(df_d) == "list")
             df_d = do.call(rbind, df_d)
-        D[as.matrix(df_d[,c("i", "j")])] = df_d$dist
-    }
-    D
-}
-
-
-#' Merge parts of distances stored in data frames.
-#'
-#' The functions tsdist_dir_parallel and tsdist_parts_parallel calculates part of
-#' the distance matrix D. This function merges these files and construct
-#' a distance matrix D.
-#'
-#' @param list_dfs A list of data frames. Each data frame should have three
-#'   columns i,j, and dist.
-#' @param num_elements The number of time series in the data set. The number of elements
-#'   defines the number of rows ans columns in the distance matrix D.
-#'
-#' @return Distance matrix D
-#' @export
-tsdist_parts_merge <- function(list_dfs, num_elements) {
-    D = matrix(1, num_elements, num_elements)
-    for (df_d in list_dfs) {
         D[as.matrix(df_d[,c("i", "j")])] = df_d$dist
     }
     D
@@ -358,6 +359,33 @@ tsdist_cor <- function(ts1, ts2, positive_cor=TRUE) {
 }
 
 
+
+# tsdist_cor_test <- function(ts1, ts2, cor_type="abs", sig_level=0.01) {
+#     corr = cor.test(ts1,ts2)
+#     d = 1
+#     if (!is.na(corr$p.value) && corr$p.value < sig_level) {
+#         if (cor_type == "pos" && corr$estimate > 0) {
+#             d = 0
+#         } else if (cor_type == "negative" && corr$estimate < 0) {
+#             d = 0
+#         } else if (cor_type == "abs" && corr$estimate < 0) {
+#     }
+#
+#
+#     if (!is.na(corr$p.value) && corr$p.value < sig_level){
+#         if (cor_type == "positive" && corr$estimate < 0) {
+#             corr$estimate = 0
+#         } else if (cor_type == "negative" && corr$estimate > 0) {
+#             corr$estimate = 0
+#         }
+#         d = as.numeric(1 - abs(corr$estimate))
+#     } else {
+#         d = not_sig_return
+#     }
+#     d
+# }
+
+
 #' Cross-correlation distance
 #'
 #' Minimum correlation distance considering a +- lag máxium (lag_max)
@@ -397,6 +425,22 @@ tsdist_ccf <- function(ts1, ts2, type=c("correlation", "covariance"),
     if (return_lag)
         dist = data.frame(dist=dist, lag=cc_max_lag)
     dist
+}
+
+
+#' Maximal information coefficient (MIC) distance.
+#'
+#' This function transforms the MIC function (from minerva package) into
+#' a distance function.
+#'
+#' @param ts1 Array. Time series 1
+#' @param ts2 Array. Time series 2
+#'
+#' @return Distance
+#' @export
+#' @importFrom minerva mine
+tsdist_mic <- function(ts1, ts2) {
+    1 - mine(ts1, ts2)$MIC
 }
 
 

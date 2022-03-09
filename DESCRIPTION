@@ -15,4 +15,5 @@ Depends:
     compiler
 Imports:
     dtw,
-    scales
+    scales,
+    minerva
