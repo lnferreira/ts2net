@@ -15,4 +15,7 @@ R> devtools::install_github("lnferreira/ts2net")
 
 ```ts2net``` is distributed under [MIT license](LICENSE.md).
 
+### Contact
 
+Leonardo N. Ferreira
+[leonardoferreira.com](https://www.leonardoferreira.com/)
