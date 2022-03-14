@@ -22,4 +22,5 @@ R> devtools::install_github("lnferreira/ts2net")
 
 Leonardo N. Ferreira
 [leonardoferreira.com](https://www.leonardoferreira.com/)
+
 ferreira@leonardonascimento.com
