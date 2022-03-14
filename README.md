@@ -11,6 +11,9 @@ R> install.packages("devtools") # if you have not installed "devtools" package
 R> devtools::install_github("lnferreira/ts2net")
 ```
 
+### Reference
+
+
 ### License
 
 ```ts2net``` is distributed under [MIT license](LICENSE.md).
@@ -19,3 +22,4 @@ R> devtools::install_github("lnferreira/ts2net")
 
 Leonardo N. Ferreira
 [leonardoferreira.com](https://www.leonardoferreira.com/)
+ferreira@leonardonascimento.com
