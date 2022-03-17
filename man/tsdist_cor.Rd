@@ -2,7 +2,7 @@
 % Please edit documentation in R/ts_dist.R
 \name{tsdist_cor}
 \alias{tsdist_cor}
-\title{Positive or negative correlation distance.}
+\title{Absolute, positive, or negative correlation distance.}
 \usage{
 tsdist_cor(ts1, ts2, cor_type = "abs")
 }
@@ -12,7 +12,7 @@ tsdist_cor(ts1, ts2, cor_type = "abs")
 \item{ts2}{Array. Time series 2}
 
 \item{cor_type}{String. "abs" (default), "+", or "-". "abs" considers the
-correlation absolute value. "+" only positve correlations and "-" only
+correlation absolute value. "+" only positive correlations and "-" only
 negative correlations.}
 }
 \value{

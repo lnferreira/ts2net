@@ -320,7 +320,7 @@ dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {
 }
 
 
-#' Positive or negative correlation distance.
+#' Absolute, positive, or negative correlation distance.
 #'
 #' Perfect positive returns zero and one means no  or negative correlations. The
 #' opposite occurs if positive_cor==F.
@@ -328,7 +328,7 @@ dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {
 #' @param ts1 Array. Time series 1
 #' @param ts2 Array. Time series 2
 #' @param cor_type String. "abs" (default), "+", or "-". "abs" considers the
-#'   correlation absolute value. "+" only positve correlations and "-" only
+#'   correlation absolute value. "+" only positive correlations and "-" only
 #'   negative correlations.
 #'
 #' @return Real value [0,1] where 0 means perfect positive (or negative
@@ -348,31 +348,35 @@ tsdist_cor <- function(ts1, ts2, cor_type="abs") {
 }
 
 
-
-# tsdist_cor_test <- function(ts1, ts2, cor_type="abs", sig_level=0.01) {
-#     corr = cor.test(ts1,ts2)
-#     d = 1
-#     if (!is.na(corr$p.value) && corr$p.value < sig_level) {
-#         if (cor_type == "pos" && corr$estimate > 0) {
-#             d = 0
-#         } else if (cor_type == "negative" && corr$estimate < 0) {
-#             d = 0
-#         } else if (cor_type == "abs" && corr$estimate < 0) {
-#     }
-#
-#
-#     if (!is.na(corr$p.value) && corr$p.value < sig_level){
-#         if (cor_type == "positive" && corr$estimate < 0) {
-#             corr$estimate = 0
-#         } else if (cor_type == "negative" && corr$estimate > 0) {
-#             corr$estimate = 0
-#         }
-#         d = as.numeric(1 - abs(corr$estimate))
-#     } else {
-#         d = not_sig_return
-#     }
-#     d
-# }
+#' Absolute, positive, or negative test correlation distance.
+#'
+#' This function is similar to tsdist_cor(), but also performs a significance
+#' test to check if the absolute, positive, or negative correlation distance
+#' is significant. See cor.test() for more details. This function returns only
+#' zero (if significant) or one.
+#'
+#' @param ts1 Array. Time series 1
+#' @param ts2 Array. Time series 2
+#' @param cor_type String. "abs" (default), "+", or "-". "abs" considers the
+#'   correlation absolute value. "+" only positive correlations and "-" only
+#'   negative correlations.
+#' @param sig_level The significance level to test if correlation is significant.
+#'   See cor.test().
+#'
+#' @return Zero iff significant, or one otherwise.
+#' @export
+tsdist_cor_test <- function(ts1, ts2, cor_type="abs", sig_level=0.01) {
+    r_test = cor.test(ts1,ts2)
+    r = as.numeric(r_test$estimate)
+    d_cor = 1
+    if (!is.na(corr$p.value) && corr$p.value < sig_level) {
+        if ((cor_type == "+" & r > 0) | (cor_type == "-" & r < 0))
+            d_cor = 0
+        if (cor_type != "+" & cor_type != "-")
+            d_cor = 0
+    }
+    d_cor
+}
 
 
 #' Cross-correlation distance
