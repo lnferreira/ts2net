@@ -4,15 +4,16 @@
 \alias{tsdist_cor}
 \title{Positive or negative correlation distance.}
 \usage{
-tsdist_cor(ts1, ts2, positive_cor = TRUE)
+tsdist_cor(ts1, ts2, cor_type = "abs")
 }
 \arguments{
 \item{ts1}{Array. Time series 1}
 
 \item{ts2}{Array. Time series 2}
 
-\item{positive_cor}{Boolean. If TRUE (default), only positive correlations are considered.
-If FALSE, only negative correlations are considered.}
+\item{cor_type}{String. "abs" (default), "+", or "-". "abs" considers the
+correlation absolute value. "+" only positve correlations and "-" only
+negative correlations.}
 }
 \value{
 Real value [0,1] where 0 means perfect positive (or negative

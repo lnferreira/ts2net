@@ -320,23 +320,6 @@ dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {
 }
 
 
-#' Absolute correlation distance.
-#'
-#' Calculates 1 - abs(cor(ts1, ts2)). Different from tsdist_cor, this distance
-#' considers both strong positive and negative correlations. Zero means no
-#' correlation.
-#'
-#' @param ts1 Array. Time series 1
-#' @param ts2 Array. Time series 2
-#'
-#' @return Real value [0,1] where 0 means perfect positive or negative correlation
-#' and 1 no  correlation.
-#' @export
-tsdist_cor_abs <- function(ts1, ts2) {
-    1 - abs(cor(ts1, ts2))
-}
-
-
 #' Positive or negative correlation distance.
 #'
 #' Perfect positive returns zero and one means no  or negative correlations. The
@@ -344,18 +327,24 @@ tsdist_cor_abs <- function(ts1, ts2) {
 #'
 #' @param ts1 Array. Time series 1
 #' @param ts2 Array. Time series 2
-#' @param positive_cor Boolean. If TRUE (default), only positive correlations are considered.
-#' If FALSE, only negative correlations are considered.
+#' @param cor_type String. "abs" (default), "+", or "-". "abs" considers the
+#'   correlation absolute value. "+" only positve correlations and "-" only
+#'   negative correlations.
 #'
 #' @return Real value [0,1] where 0 means perfect positive (or negative
 #' if positive_cor==F) correlation and 1 no positive (or negative
 #' if positive_cor==F) correlation.
 #' @export
-tsdist_cor <- function(ts1, ts2, positive_cor=TRUE) {
+tsdist_cor <- function(ts1, ts2, cor_type="abs") {
     r = cor(ts1, ts2)
-    if (!positive_cor)
-        r = r * -1
-    1 - pmax(0, r)
+    if (cor_type == "+") {
+        d_cor = 1 - pmax(0, r)
+    } else if (cor_type == "-") {
+        d_cor = 1 - pmax(0, r * -1)
+    } else {
+        d_cor = 1 - abs(r)
+    }
+    d_cor
 }
 
 
@@ -393,8 +382,8 @@ tsdist_cor <- function(ts1, ts2, positive_cor=TRUE) {
 #' @param ts1 Array. Time series 1
 #' @param ts2 Array. Time series 2
 #' @param type String. "correlation" or "covariance" to be used (type) in the ccf function.
-#' @param cor_type String. "abs" (default), "positive", or "negative". "Abs" considers the
-#'   correlation absolute value. "positive" only positve correlations and "negative" only
+#' @param cor_type String. "abs" (default), "+", or "-". "abs" considers the
+#'   correlation absolute value. "+" only positve correlations and "-" only
 #'   negative correlations.
 #' @param directed Boolean. If FALSE (default), the lag interval [-lag_max,+lag_max] is
 #'   considered. Otherwise, [-lag_max,0] is considered.
@@ -413,9 +402,9 @@ tsdist_ccf <- function(ts1, ts2, type=c("correlation", "covariance"),
         cc_acfs = cc_acfs[cc_lags <= 0]
         cc_lags = cc_lags[cc_lags <= 0]
     }
-    if (cor_type == "positive")
+    if (cor_type == "+")
         cc_acfs[cc_acfs < 0] = 0
-    if (cor_type == "negative")
+    if (cor_type == "-")
         cc_acfs[cc_acfs > 0] = 0
     cc_acfs = abs(cc_acfs)
     cc_max_index = which.max(cc_acfs)
