@@ -4,7 +4,7 @@
 \alias{tsdist_cor_test}
 \title{Absolute, positive, or negative test correlation distance.}
 \usage{
-tsdist_cor_test(ts1, ts2, cor_type = "abs", sig_level = 0.01)
+tsdist_cor_test(ts1, ts2, cor_type = "abs", sig_level = 0.01, ...)
 }
 \arguments{
 \item{ts1}{Array. Time series 1}
@@ -17,6 +17,8 @@ negative correlations.}
 
 \item{sig_level}{The significance level to test if correlation is significant.
 See cor.test().}
+
+\item{...}{Additional parameters to cor.test() function.}
 }
 \value{
 Zero iff significant, or one otherwise.

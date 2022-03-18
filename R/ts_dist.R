@@ -330,13 +330,14 @@ dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {
 #' @param cor_type String. "abs" (default), "+", or "-". "abs" considers the
 #'   correlation absolute value. "+" only positive correlations and "-" only
 #'   negative correlations.
+#' @param ... Additional parameters to cor() function.
 #'
 #' @return Real value [0,1] where 0 means perfect positive (or negative
 #' if positive_cor==F) correlation and 1 no positive (or negative
 #' if positive_cor==F) correlation.
 #' @export
-tsdist_cor <- function(ts1, ts2, cor_type="abs") {
-    r = cor(ts1, ts2)
+tsdist_cor <- function(ts1, ts2, cor_type="abs", ...) {
+    r = cor(ts1, ts2, ...)
     if (cor_type == "+") {
         d_cor = 1 - pmax(0, r)
     } else if (cor_type == "-") {
@@ -362,14 +363,15 @@ tsdist_cor <- function(ts1, ts2, cor_type="abs") {
 #'   negative correlations.
 #' @param sig_level The significance level to test if correlation is significant.
 #'   See cor.test().
+#' @param ... Additional parameters to cor.test() function.
 #'
 #' @return Zero iff significant, or one otherwise.
 #' @export
-tsdist_cor_test <- function(ts1, ts2, cor_type="abs", sig_level=0.01) {
-    r_test = cor.test(ts1,ts2)
+tsdist_cor_test <- function(ts1, ts2, cor_type="abs", sig_level=0.01, ...) {
+    r_test = cor.test(ts1, ts2, ...)
     r = as.numeric(r_test$estimate)
     d_cor = 1
-    if (!is.na(corr$p.value) && corr$p.value < sig_level) {
+    if (!is.na(corr$p.value) && corr$p.value <= sig_level) {
         if ((cor_type == "+" & r > 0) | (cor_type == "-" & r < 0))
             d_cor = 0
         if (cor_type != "+" & cor_type != "-")
@@ -418,6 +420,39 @@ tsdist_ccf <- function(ts1, ts2, type=c("correlation", "covariance"),
     if (return_lag)
         dist = data.frame(dist=dist, lag=cc_max_lag)
     dist
+}
+
+
+#' Variation of Information distance
+#'
+#' The variation of information (VoI) is a distance function based on mutual
+#' information.
+#'
+#' @param ts1 Array. Time series 1
+#' @param ts2 Array. Time series 2
+#' @param nbins The number of bins used for the discretization of both time series.
+#'   It can be a positive integer or a string with one of the three rules
+#'   "freedman-diaconis" (default), "sturges", or "scott".
+#' @param mi_method The name of the entropy estimator used in the functions
+#'   mutinformation() and entropy() from the infotheo package.
+#'
+#' @return Distance
+#' @export
+#' @importFrom infotheo discretize mutinformation entropy
+tsdist_voi <- function(ts1, ts2, nbins = "freedman-diaconis", mi_method="emp") {
+    if (nbins == "freedman-diaconis") {
+        nbins = nclass.FD(ts1)
+    } else if (nbins == "sturges") {
+        nbins = nclass.Sturges(ts1)
+    } else if (nbins == "scott") {
+        nbins = nclass.scott(ts1)
+    }
+    ts1 = discretize(ts1, nbins = nbins)
+    ts2 = discretize(ts2, nbins = nbins)
+    mu = mutinformation(ts1, ts2, method = mi_method)
+    e1 = entropy(ts1, method = mi_method)
+    e2 = entropy(ts2, method = mi_method)
+    e1 + e2 - 2 * mu
 }
 
 

@@ -4,7 +4,7 @@
 \alias{tsdist_cor}
 \title{Absolute, positive, or negative correlation distance.}
 \usage{
-tsdist_cor(ts1, ts2, cor_type = "abs")
+tsdist_cor(ts1, ts2, cor_type = "abs", ...)
 }
 \arguments{
 \item{ts1}{Array. Time series 1}
@@ -14,6 +14,8 @@ tsdist_cor(ts1, ts2, cor_type = "abs")
 \item{cor_type}{String. "abs" (default), "+", or "-". "abs" considers the
 correlation absolute value. "+" only positive correlations and "-" only
 negative correlations.}
+
+\item{...}{Additional parameters to cor() function.}
 }
 \value{
 Real value [0,1] where 0 means perfect positive (or negative
