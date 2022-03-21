@@ -432,28 +432,80 @@ tsdist_ccf <- function(ts1, ts2, type=c("correlation", "covariance"),
 #' @param ts2 Array. Time series 2
 #' @param nbins The number of bins used for the discretization of both time series.
 #'   It can be a positive integer or a string with one of the three rules
-#'   "freedman-diaconis" (default), "sturges", or "scott".
+#'   "sturges" (default), "freedman-diaconis", or "scott".
 #' @param mi_method The name of the entropy estimator used in the functions
 #'   mutinformation() and entropy() from the infotheo package.
 #'
 #' @return Distance
 #' @export
 #' @importFrom infotheo discretize mutinformation entropy
-tsdist_voi <- function(ts1, ts2, nbins = "freedman-diaconis", mi_method="emp") {
-    if (nbins == "freedman-diaconis") {
-        nbins = nclass.FD(ts1)
-    } else if (nbins == "sturges") {
-        nbins = nclass.Sturges(ts1)
-    } else if (nbins == "scott") {
-        nbins = nclass.scott(ts1)
+tsdist_voi <- function(ts1, ts2, nbins = c("sturges", "freedman-diaconis", "scott"),
+                       mi_method="emp") {
+    ts_bin = ts1
+    if (length(ts2) > length(ts1))
+        ts_bin = ts2
+    if (nbins[1] == "sturges") {
+        nbins = nclass.Sturges(ts_bin)
+    } else if (nbins[1] == "freedman-diaconis") {
+        nbins = nclass.FD(ts_bin)
+    } else if (nbins[1] == "scott") {
+        nbins = nclass.scott(ts_bin)
     }
-    ts1 = discretize(ts1, nbins = nbins)
-    ts2 = discretize(ts2, nbins = nbins)
-    mu = mutinformation(ts1, ts2, method = mi_method)
-    e1 = entropy(ts1, method = mi_method)
-    e2 = entropy(ts2, method = mi_method)
-    e1 + e2 - 2 * mu
+    ts1b = discretize(ts1, nbins = nbins)
+    ts2b = discretize(ts2, nbins = nbins)
+    i = mutinformation(ts1b, ts2b, method = mi_method)
+    h1 = entropy(ts1b, method = mi_method)
+    h2 = entropy(ts2b, method = mi_method)
+    h1 + h2 - 2 * i
 }
+
+
+#' Normalized mutual information distance
+#'
+#' Calculates the normalized mutual information (NMI) and returns it as distance
+#' 1 - NMI.
+#'
+#' @param ts1 Array. Time series 1
+#' @param ts2 Array. Time series 2
+#' @param nbins The number of bins used for the discretization of both time series.
+#'   It can be a positive integer or a string with one of the three rules
+#'   "sturges" (default), "freedman-diaconis", or "scott".
+#' @param normalization_method The mutual information (I) normalization method.
+#'   Options are "sum" (default) 1-(2I/(h1+h2)), "min" 1-(I/min(h1,h2)), "max"
+#'   1-(I/max(h1,h2)), and "sqrt" 1-(I/sqrt(h1*h2)).
+#' @param mi_method The name of the entropy estimator used in the functions
+#'   mutinformation() and entropy() from the infotheo package.
+#'
+#' @return Distance
+#' @export
+#' @importFrom infotheo discretize mutinformation entropy
+tsdist_nmi <- function(ts1, ts2, nbins = c("sturges", "freedman-diaconis", "scott"),
+                       normalization_method = c("sum", "min", "max", "sqrt"),
+                       mi_method="emp") {
+    ts_bin = ts1
+    if (length(ts2) > length(ts1))
+        ts_bin = ts2
+    if (nbins[1] == "sturges") {
+        nbins = nclass.Sturges(ts_bin)
+    } else if (nbins[1] == "freedman-diaconis") {
+        nbins = nclass.FD(ts_bin)
+    } else if (nbins[1] == "scott") {
+        nbins = nclass.scott(ts_bin)
+    }
+    ts1b = discretize(ts1, nbins = nbins)
+    ts2b = discretize(ts2, nbins = nbins)
+    i = mutinformation(ts1b, ts2b, method = mi_method)
+    h1 = entropy(ts1b, method = mi_method)
+    h2 = entropy(ts2b, method = mi_method)
+    normalization_method = match.arg(normalization_method)
+    normalization <- switch(normalization_method,
+                sum = 0.5 * (h1 + h2),
+                min = min(h1, h2),
+                max = max(h1, h2),
+                sqrt = sqrt(h1 * h2))
+    1 - (i/normalization)
+}
+
 
 
 #' Maximal information coefficient (MIC) distance.
