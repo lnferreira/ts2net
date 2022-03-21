@@ -1,4 +1,6 @@
-# ts2net
+# ts2net <img src="man/figures/logo.png" align="right" height="139" />
+
+<img src="man/figures/logo.png" align="right" height="139" />
 
 ```ts2net``` is an R package to transform one or multiples time series into networks. 
 
@@ -6,9 +8,13 @@
 
 To install the ```ts2net``` package, please run the following line in R:
 
+``` r
+install.packages("dataRetrieval")
 ```
-R> install.packages("devtools") # if you have not installed "devtools" package
-R> devtools::install_github("lnferreira/ts2net")
+
+``` r
+install.packages("remotes") # if you have not installed "remotes" package
+remotes::install_github("lnferreira/ts2net")
 ```
 
 ### Reference
