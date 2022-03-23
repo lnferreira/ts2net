@@ -2,7 +2,7 @@
 % Please edit documentation in R/ts_dist.R
 \name{tsdist_cor_test}
 \alias{tsdist_cor_test}
-\title{Absolute, positive, or negative test correlation distance.}
+\title{Absolute, positive, or negative correlation distance with significance test.}
 \usage{
 tsdist_cor_test(ts1, ts2, cor_type = "abs", sig_level = 0.01, ...)
 }

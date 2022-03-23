@@ -349,7 +349,7 @@ tsdist_cor <- function(ts1, ts2, cor_type="abs", ...) {
 }
 
 
-#' Absolute, positive, or negative test correlation distance.
+#' Absolute, positive, or negative correlation distance with significance test.
 #'
 #' This function is similar to tsdist_cor(), but also performs a significance
 #' test to check if the absolute, positive, or negative correlation distance
@@ -537,4 +537,47 @@ tsdist_mic <- function(ts1, ts2) {
 #' @export
 tsdist_dtw <- function(ts1, ts2, ...) {
     dtw(ts1,ts2, ...)$distance
+}
+
+
+#' van Rossum distance with significance test
+#'
+#' This function compares the times which the events occur e.g., time indices
+#' where the time series values are different than zero. Note that the intensity
+#' does not matter but if there is an event or not. This function also performs
+#' a statistical test using a shuffling approach to test significance. This
+#' implementation uses the fmetric from the mmpp package.
+#'
+#' @param ts1 Binary time series 1 (one means an event, or zero otherwise)
+#' @param ts2 Binary time series 2 (one means an event, or zero otherwise)
+#' @param tau
+#' @param repetitions Number of repetitions to construct the confidence interval
+#' @param sig_level The significance level to test if correlation is significant.
+#'
+#' @return 0 if significant synchronization or 1 otherwise
+#' @importFrom mmpp fmetric
+#' @export
+tsdist_vr_test <- function(ts1, ts2, tau = 1, repetitions=1000,
+                           sig_level=0.01) {
+    t1 = which(ts1 > 0)
+    t2 = which(ts2 > 0)
+    t1_num_events = length(t1)
+    t2_num_events = length(t2)
+    t1_length = length(ts1)
+    t2_length = length(ts2)
+    sampling_results = sapply(1:repetitions, function(i){
+        t1_random = sample(t1_length, t1_num_events)
+        t2_random = sample(t2_length, t2_num_events)
+        fmetric(t1_random, t2_random, measure = "dist", tau = tau)
+    })
+    threshold = quantile(sampling_results, sig_level)
+    d = fmetric(t1, t2, measure = "dist", tau = tau)
+    if (is.na(d)) {
+        d = 1
+    } else if (d < threshold) {
+        d = 0
+    } else {
+        d = 1
+    }
+    d
 }
