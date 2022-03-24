@@ -17,3 +17,5 @@ Imports:
     dtw,
     scales,
     minerva
+Remotes:
+    url::https://github.com/JonatanSiegmund/CoinCalc/blob/master/CoinCalc_2.0.tar.gz
