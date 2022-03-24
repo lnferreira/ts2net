@@ -16,6 +16,8 @@ Depends:
 Imports:
     dtw,
     scales,
-    minerva
+    minerva,
+    infotheo,
+    mmpp
 Remotes:
-    url::https://github.com/JonatanSiegmund/CoinCalc/raw/master/CoinCalc_2.0.tar.gz
+    url::https://github.com/lnferreira/CoinCalc/raw/master/CoinCalc_2.0.tar.gz
