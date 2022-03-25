@@ -17,6 +17,20 @@ remotes::install_github("lnferreira/ts2net")
 
 ### Reference
 
+Please cite this paper if you used ```ts2net``` package in a publication.
+
+```
+@article{ts2net,
+  title         = "ts2net: From Time Series to Networks in R",
+  author        = "Ferreira, Leonardo N",
+  month         =  Apr,
+  year          =  2022,
+  copyright     = "https://github.com/lnferreira/ts2net/blob/main/LICENSE.md",
+  archivePrefix = "arXiv",
+  primaryClass  = "",
+  eprint        = ""
+}
+```
 
 ### License
 

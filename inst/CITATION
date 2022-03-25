@@ -1,16 +1,12 @@
 citHeader("To cite ts2net in publications use:")
 
 citEntry(
-  entry    = "article",
-  title    = "ts2net: From Time Series to Networks in R",
-  author   = "Leonardo N. Ferreira",
-  journal  = "Journal of Statistical Software",
-  year     = "2022",
-  volume   = "0",
-  number   = "0",
-  pages    = "0",
-  url      = "http://www.leonardoferreira.com/",
-  textVersion = paste(
-
-  )
+  entry     = "article",
+  title     = "ts2net: From Time Series to Networks in R",
+  author    = "Leonardo N. Ferreira",
+  month     = "Apr",
+  year      = "2022",
+  url       = "http://www.leonardoferreira.com/",
+  copyright = "https://github.com/lnferreira/ts2net/blob/main/LICENSE.md",
+  archivePrefix = "arXiv"
 )
