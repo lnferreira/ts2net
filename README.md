@@ -42,4 +42,4 @@ Please cite this paper if you used ```ts2net``` package in a publication.
 
 Leonardo N. Ferreira  
 [leonardoferreira.com](https://www.leonardoferreira.com/)  
-:ferreira@leonardonascimento.com
+ferreira@leonardonascimento.com
