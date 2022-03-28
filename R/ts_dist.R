@@ -277,49 +277,6 @@ tsdist_file_parts_merge <- function(list_files, dir_path, num_elements, file_typ
 }
 
 
-#' Normalize a distance/similarity matrix.
-#'
-#' @param D Distance/similarity matrix
-#' @param to An array of two elements c(min_value, max_value) representing
-#'    the interval where the elements of dist_matrix will be normalized to.
-#'
-#' @return Normalized matrix
-#' @importFrom scales rescale
-#' @export
-dist_matrix_normalize <- function(D, to=c(0,1)) {
-    distNorm = matrix(0, nrow(D), ncol(D))
-    d = D[upper.tri(D)]
-    d = rescale(d, to = to)
-    distNorm[upper.tri(distNorm)] = d
-    distNorm = distNorm + t(distNorm)
-    colnames(distNorm) = colnames(D)
-    rownames(distNorm) = rownames(D)
-    distNorm
-}
-
-
-#' Returns the distance value that corresponds to the desired percentile. This function
-#' is useful when the user wants to generate networks with different distance functions
-#' but with the same link density.
-#'
-#' @param D distance matrix
-#' @param percentile (Float) The desired percentile of lower distances.
-#' @param is_D_symetric (Boolean)
-#'
-#' @return Distance percentile value.
-#' @export
-dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {
-    D[is.na(D)] = +Inf
-    d = D
-    if (is_D_symetric){
-        d = D[upper.tri(D)]
-    } else {
-        d = D[upper.tri(D) | lower.tri(D)]
-    }
-    quantile(d, probs = c(percentile))
-}
-
-
 #' Absolute, positive, or negative correlation distance.
 #'
 #' Perfect positive returns zero and one means no  or negative correlations. The
