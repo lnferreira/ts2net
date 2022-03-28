@@ -3,6 +3,7 @@
 export(dataset_sincos_generate)
 export(dist_matrix_normalize)
 export(dist_percentile)
+export(events_from_ts)
 export(net_epsilon_create)
 export(net_knn_create)
 export(net_knn_create_approx)

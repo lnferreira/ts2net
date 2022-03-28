@@ -1,7 +1,5 @@
 # ts2net <img src="man/figures/logo.png" align="right" height="139" />
 
-:chart_with_upwards_trend: :point_right: :spider_web: :wink:
-
 ```ts2net``` is an R package to transform one or multiples time series into networks.
 
 ### Installation
