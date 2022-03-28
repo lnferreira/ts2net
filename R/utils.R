@@ -84,16 +84,16 @@ events_from_ts <- function(ts, th, method=c("greater_than", "lower_than",
                events_ts[ts <= th] = 1
                },
            top_percentile = {
-               events_ts[ts >= quantile(ts, probs = 1 - th)]
+               events_ts[ts >= quantile(ts, probs = 1 - th)] = 1
            },
            lower_percentile = {
-               events_ts[ts >= quantile(ts, probs = th)]
+               events_ts[ts >= quantile(ts, probs = th)] = 1
            },
            highest = {
-               events_ts[order(ts1, decreasing = T)[1:th]]
+               events_ts[order(ts1, decreasing = T)[1:th]] = 1
            },
            lowest = {
-               events_ts[order(ts1)[1:th]]
+               events_ts[order(ts1)[1:th]] = 1
            })
     events_ts
 }
