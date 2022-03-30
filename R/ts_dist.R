@@ -505,23 +505,24 @@ tsdist_dtw <- function(ts1, ts2, ...) {
 #' a statistical test using a shuffling approach to test significance. This
 #' implementation uses the fmetric from the mmpp package.
 #'
-#' @param ts1 Binary time series 1 (one means an event, or zero otherwise)
-#' @param ts2 Binary time series 2 (one means an event, or zero otherwise)
-#' @param tau
+#' @param ets1 Event time series 1 (one means an event, or zero otherwise)
+#' @param ets2 Event time series 2 (one means an event, or zero otherwise)
+#' @param tau Parameter for filtering function (See fmetric function from mmpp
+#'   package.)
 #' @param repetitions Number of repetitions to construct the confidence interval
 #' @param sig_level The significance level to test if correlation is significant.
 #'
 #' @return 0 if significant synchronization or 1 otherwise
 #' @importFrom mmpp fmetric
 #' @export
-tsdist_vr_test <- function(ts1, ts2, tau = 1, repetitions=1000,
+tsdist_vr_test <- function(ets1, ets2, tau = 1, repetitions=1000,
                            sig_level=0.01) {
-    t1 = which(ts1 > 0)
-    t2 = which(ts2 > 0)
+    t1 = which(ets1 > 0)
+    t2 = which(ets2 > 0)
     t1_num_events = length(t1)
     t2_num_events = length(t2)
-    t1_length = length(ts1)
-    t2_length = length(ts2)
+    t1_length = length(ets1)
+    t2_length = length(ets2)
     sampling_results = sapply(1:repetitions, function(i){
         t1_random = sample(t1_length, t1_num_events)
         t2_random = sample(t2_length, t2_num_events)

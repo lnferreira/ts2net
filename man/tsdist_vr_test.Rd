@@ -4,12 +4,15 @@
 \alias{tsdist_vr_test}
 \title{van Rossum distance with significance test}
 \usage{
-tsdist_vr_test(ts1, ts2, tau = 1, repetitions = 1000, sig_level = 0.01)
+tsdist_vr_test(ets1, ets2, tau = 1, repetitions = 1000, sig_level = 0.01)
 }
 \arguments{
-\item{ts1}{Binary time series 1 (one means an event, or zero otherwise)}
+\item{ets1}{Event time series 1 (one means an event, or zero otherwise)}
 
-\item{ts2}{Binary time series 2 (one means an event, or zero otherwise)}
+\item{ets2}{Event time series 2 (one means an event, or zero otherwise)}
+
+\item{tau}{Parameter for filtering function (See fmetric function from mmpp
+package.)}
 
 \item{repetitions}{Number of repetitions to construct the confidence interval}
 

@@ -97,3 +97,4 @@ events_from_ts <- function(ts, th, method=c("greater_than", "lower_than",
            })
     events_ts
 }
+
