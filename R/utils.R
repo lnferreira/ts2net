@@ -90,10 +90,10 @@ events_from_ts <- function(ts, th, method=c("greater_than", "lower_than",
                events_ts[ts >= quantile(ts, probs = th)] = 1
            },
            highest = {
-               events_ts[order(ts1, decreasing = T)[1:th]] = 1
+               events_ts[order(ts, decreasing = T)[1:th]] = 1
            },
            lowest = {
-               events_ts[order(ts1)[1:th]] = 1
+               events_ts[order(ts)[1:th]] = 1
            })
     events_ts
 }
