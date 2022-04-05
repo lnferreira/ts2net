@@ -503,7 +503,7 @@ tsdist_dtw <- function(ts1, ts2, ...) {
 #' where the time series values are different than zero. Note that the intensity
 #' does not matter but if there is an event or not. This function also performs
 #' a statistical test using a shuffling approach to test significance. This
-#' implementation uses the fmetric from the mmpp package.
+#' implementation uses the fmetric function from the mmpp package.
 #'
 #' @param ets1 Event time series 1 (one means an event, or zero otherwise)
 #' @param ets2 Event time series 2 (one means an event, or zero otherwise)
@@ -538,4 +538,28 @@ tsdist_vr_test <- function(ets1, ets2, tau = 1, repetitions=1000,
         d = 1
     }
     d
+}
+
+
+#' Event coincidence analysis.
+#'
+#' This function compares the times which the events occur e.g., time indices
+#' where the time series values are different than zero. Note that the intensity
+#' does not matter but if there is an event or not. This function also performs
+#' a statistical test using a shuffling approach to test significance. This
+#' implementation uses the CC.eca.ts function from the CoinCalc package.
+#'
+#' @param ets1
+#' @param ets2
+#'
+#' @return
+#' @importFrom CoinCalc CC.eca.ts
+#' @export
+tsdist_eca <- function(ets1, ets2, delT, tau, ...) {
+    et1 = which(ets1==1)
+    et2 = which(ets2==1)
+    1 - CC.eca.es(et1, et2, delT = 1, tau = 1,
+                  spanA = c(1, length(ets1)),
+                  spanB = c(1, length(ets2)),
+                  sym = TRUE, ...)
 }
