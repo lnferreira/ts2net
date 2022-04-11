@@ -56,14 +56,17 @@ dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {
 #'   * `top_percentile`: Values greater than the `th` percentile.
 #'   * `highest`: The top `th` values.
 #'   * `lowest`: The lower `th` values.
+#' @param return_marked_times Return the time indices (marked points) where
+#'   the events occur.
 #'
 #' @return An event (binary, 1: event, 0 otherwise) time series
 #' @export
 events_from_ts <- function(ts, th, method=c("greater_than", "lower_than",
                                                 "top_percentile", "lower_percentile",
-                                                "highest", "lowest")) {
+                                                "highest", "lowest"),
+                           return_marked_times=FALSE) {
     events_method = match.arg(method)
-    events_ts = rep(0, length(ts))
+    ets = rep(0, length(ts))
     if (events_method %in% c("top_percentile", "lower_percentile")) {
         if (missing(th) | th < 0 | th > 1)
             stop("Please inform the percentile th = [0,1].")
@@ -78,23 +81,52 @@ events_from_ts <- function(ts, th, method=c("greater_than", "lower_than",
     }
     switch(events_method,
            greater_than = {
-               events_ts[ts >= th] = 1
+               ets[ts >= th] = 1
                },
            lower_than = {
-               events_ts[ts <= th] = 1
+               ets[ts <= th] = 1
                },
            top_percentile = {
-               events_ts[ts >= quantile(ts, probs = 1 - th)] = 1
+               ets[ts >= quantile(ts, probs = 1 - th)] = 1
            },
            lower_percentile = {
-               events_ts[ts >= quantile(ts, probs = th)] = 1
+               ets[ts >= quantile(ts, probs = th)] = 1
            },
            highest = {
-               events_ts[order(ts, decreasing = T)[1:th]] = 1
+               ets[order(ts, decreasing = T)[1:th]] = 1
            },
            lowest = {
-               events_ts[order(ts)[1:th]] = 1
+               ets[order(ts)[1:th]] = 1
            })
-    events_ts
+    if (return_marked_times)
+        ets = which(ets == 1)
+    ets
 }
 
+
+
+#' Random event time series generator
+#'
+#' It generates an event time series with length ts_length with
+#' num_events events considering a uniform probability distribution.
+#'
+#' @param ts_length Time series Length
+#' @param num_events The number of events
+#' @param return_marked_times Return the time indices (marked points) where
+#'   the events occur.
+#'
+#' @return An event (binary, 1: event, 0 otherwise) time series
+#' @export
+random_ets <- function(ts_length, num_events, return_marked_times=FALSE) {
+    if (num_events > ts_length) {
+        warning("Desired number of events (", num_events, ") larger
+                than desired time series length (", ts_length, "). Returning ",
+                ts_length, " events.")
+        num_events = ts_length
+    }
+    ets = array(0, ts_length)
+    ets[sample(ts_length, num_events)] = 1
+    if (return_marked_times)
+        ets = which(ets == 1)
+    ets
+}
