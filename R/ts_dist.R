@@ -665,25 +665,52 @@ tsdist_vr <- function(ets1, ets2, tau = 1, sig_test=FALSE,
 #' This function compares the times which the events occur e.g., time indices
 #' where the time series values are different than zero. Note that the intensity
 #' does not matter but if there is an event or not. This function also performs
-#' a statistical test using a shuffling approach to test significance. This
-#' implementation uses the CC.eca.ts function from the CoinCalc package.
+#' a statistical test. This implementation uses the CC.eca.ts function from the
+#' CoinCalc package. The current implementation of tsdist_eca() function requires
+#' that ets1 and ets2 have same length. However, the CC.eca.es() can be adapted if
+#' the two time series have different lengths.
 #'
 #' @param ets1 Event time series 1 (one means an event, or zero otherwise)
 #' @param ets2 Event time series 2 (one means an event, or zero otherwise)
-#' @param delT
-#' @param tau
-#' @param ...
+#' @param delT Positive value [1 inf], default = 1. Tolerance window delta T. An
+#'   event in time series ets1 occurring simultaneously or delT steps after an
+#'   event in time series ets2 also counts for a coincidence. With delT=0 only
+#'   simultaneous events are counted for coincidences.
+#' @param tau Positive value [0 inf], default = 0. Time lag parameter tau allows
+#'   for shifted events to be counted for coincidences. If e.g. tau=5, an event
+#'   in time series ets1 occurring exactly 5 time steps after an event in time
+#'   series ets2 also counts for coincidence.
+#' @param sym Symetrical distance function (Default = TRUE). When TRUE, The
+#'   tolerance window is symmetrically placed around t-tau and t+tau, respectively.
+#'   When FALSE, the window starts at t-tau and ends at t-tau-delT for the
+#'   precursor coincidence (ets1 -> ets2) and t+tau to t+tau+delT for the trigger
+#'   coincidence (ets2 -> ets1).
+#' @param sig_test Run a statistical test. Return 0 if significant or 1 otherwise
+#' @param sig_method "poisson" (default), "wt.surrogate" for surrogate time series
+#'   having the same average waiting time between two events, or "shuffle.surrogate",
+#'   for randomly shuffled time series having the same number of events as the
+#'   original time one.
+#' @param sig_level The significance level to test if correlation is significant.
+#' @param reps Positive natural number (100 default) defining the number of
+#'   surrogate/shuffled time series to be produced for the "surrogate" or "shuffle"
+#'   significance test.
 #'
-#' TODO: FINISH!!!
-#'
-#' @return
+#' @return Distance
 #' @importFrom CoinCalc CC.eca.ts
 #' @export
-tsdist_eca <- function(ets1, ets2, delT, tau, sym, ...) {
-    tts1 = which(ets1 > 0)
-    tts2 = which(ets2 > 0)
-    1 - CC.eca.es(tts1, tts2, delT = 1, tau = 1,
-                  spanA = c(1, length(ets1)),
-                  spanB = c(1, length(ets2)),
-                  sym = sym, ...)
+tsdist_eca <- function(ets1, ets2, delT=0, tau=0, sym=TRUE, sig_test=FALSE,
+                       sig_method=c("poisson", "wt.surrogate", "shuffle.surrogate"),
+                       sig_level=0.01, reps = 100) {
+    if (all(ets1==0) || all(ets2==0))
+        return(0)
+    sig_method = match.arg(sig_method)
+    eca = CC.eca.ts(as.vector(ets1), as.vector(ets2),
+                    delT = delT, tau = tau, alpha = sig_level, sym = sym,
+                    sigtest = sig_method, reps = reps)
+    if (sig_test) {
+        d = ifelse(eca$`NH precursor`, 0, 1)
+    } else {
+        d = 1 - eca$`precursor coincidence rate`
+    }
+    d
 }
