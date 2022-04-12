@@ -8,7 +8,8 @@ events_from_ts(
   ts,
   th,
   method = c("greater_than", "lower_than", "top_percentile", "lower_percentile",
-    "highest", "lowest")
+    "highest", "lowest"),
+  return_marked_times = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ total number (if `method=highest` or `=lowest`).}
 * `top_percentile`: Values greater than the `th` percentile.
 * `highest`: The top `th` values.
 * `lowest`: The lower `th` values.}
+
+\item{return_marked_times}{Return the time indices (marked points) where
+the events occur.}
 }
 \value{
 An event (binary, 1: event, 0 otherwise) time series

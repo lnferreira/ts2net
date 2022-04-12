@@ -104,7 +104,6 @@ events_from_ts <- function(ts, th, method=c("greater_than", "lower_than",
 }
 
 
-
 #' Random event time series generator
 #'
 #' It generates an event time series with length ts_length with
