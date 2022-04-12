@@ -5,7 +5,7 @@
 #' is usually the first try and might work if the number of time series
 #' and their length are not too big.
 #'
-#' @param tsList List of time series (arrays).
+#' @param ts_list List of time series (arrays).
 #' @param dist_func Function to be applied to all combinations
 #'     of time series. This function should have at least two parameters
 #'     for each time series. Ex: function(ts1, ts2){ cor(ts1, ts2) }
@@ -22,10 +22,10 @@
 #'     i and j.
 #' @importFrom compiler cmpfun
 #' @export
-ts_dist <- function(tsList, dist_func=tsdist_cor, is_symetric=TRUE,
+ts_dist <- function(ts_list, dist_func=tsdist_cor, is_symetric=TRUE,
                           error_value=NaN, warn_error=TRUE, num_cores=1, ...) {
     measureFuncCompiled <- cmpfun(dist_func)
-    tsListLength = length(tsList)
+    tsListLength = length(ts_list)
     combs = c()
     if (is_symetric){
         combs = combn(tsListLength, 2, simplify = FALSE)
@@ -35,10 +35,11 @@ ts_dist <- function(tsList, dist_func=tsdist_cor, is_symetric=TRUE,
     }
     dists = mclapply(combs, function(ids){
         tryCatch({
-            measureFuncCompiled(tsList[[ids[1]]], tsList[[ids[2]]], ...)
+            measureFuncCompiled(ts_list[[ids[1]]], ts_list[[ids[2]]], ...)
         }, error=function(cond) {
             if (warn_error)
-                warning("Error when calculating distance between time series ", ids[1], " and ", ids[2])
+                warning("Error when calculating distance between time
+                        series ", ids[1], " and ", ids[2])
             error_value
         })
     }, mc.cores = num_cores)
