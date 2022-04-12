@@ -6,8 +6,8 @@
 \usage{
 ts_dist(
   tsList,
-  measureFunc = tsdist_cor,
-  isSymetric = TRUE,
+  dist_func = tsdist_cor,
+  is_symetric = TRUE,
   error_value = NaN,
   warn_error = TRUE,
   num_cores = 1,
@@ -17,11 +17,11 @@ ts_dist(
 \arguments{
 \item{tsList}{List of time series (arrays).}
 
-\item{measureFunc}{Function to be applied to all combinations
+\item{dist_func}{Function to be applied to all combinations
 of time series. This function should have at least two parameters
 for each time series. Ex: function(ts1, ts2){ cor(ts1, ts2) }}
 
-\item{isSymetric}{Boolean. If the distance function is symmetric.}
+\item{is_symetric}{Boolean. If the distance function is symmetric.}
 
 \item{error_value}{The value returned if an error occur when calculating a
 the distance for a pair of time series.}
@@ -32,10 +32,6 @@ error occur during the calculations.}
 \item{num_cores}{Numeric. Number of cores}
 
 \item{...}{Additional parameters for measureFunc}
-
-\item{isDist}{Boolean. If measureFunc is a distance function. iF TRUE,
-a zero value returned by measureFunc(ts1,ts2) means that the pair
-of time series ts1 and ts2 are perfectly equal.}
 }
 \value{
 A distance or similarity matrix M whose position M_{ij}

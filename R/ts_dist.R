@@ -6,13 +6,10 @@
 #' and their length are not too big.
 #'
 #' @param tsList List of time series (arrays).
-#' @param measureFunc Function to be applied to all combinations
+#' @param dist_func Function to be applied to all combinations
 #'     of time series. This function should have at least two parameters
 #'     for each time series. Ex: function(ts1, ts2){ cor(ts1, ts2) }
-#' @param isDist Boolean. If measureFunc is a distance function. iF TRUE,
-#'     a zero value returned by measureFunc(ts1,ts2) means that the pair
-#'     of time series ts1 and ts2 are perfectly equal.
-#' @param isSymetric Boolean. If the distance function is symmetric.
+#' @param is_symetric Boolean. If the distance function is symmetric.
 #' @param num_cores Numeric. Number of cores
 #' @param error_value The value returned if an error occur when calculating a
 #'     the distance for a pair of time series.
@@ -25,12 +22,12 @@
 #'     i and j.
 #' @importFrom compiler cmpfun
 #' @export
-ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
+ts_dist <- function(tsList, dist_func=tsdist_cor, is_symetric=TRUE,
                           error_value=NaN, warn_error=TRUE, num_cores=1, ...) {
-    measureFuncCompiled <- cmpfun(measureFunc)
+    measureFuncCompiled <- cmpfun(dist_func)
     tsListLength = length(tsList)
     combs = c()
-    if (isSymetric){
+    if (is_symetric){
         combs = combn(tsListLength, 2, simplify = FALSE)
     } else {
         combs = as.matrix(expand.grid(1:tsListLength, 1:tsListLength))
@@ -46,7 +43,7 @@ ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
         })
     }, mc.cores = num_cores)
     dist_matrix = matrix(0, tsListLength, tsListLength)
-    if (isSymetric){
+    if (is_symetric){
         dist_matrix[lower.tri(dist_matrix)] = unlist(dists)
         dist_matrix = as.matrix(as.dist(dist_matrix))
     } else {
@@ -67,7 +64,7 @@ ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
 #' dataset is huge, it might represent a memory problem. In this case,
 #' dist_dir_parallel() is more recommended.
 #'
-#' @param tsList List of time series.
+#' @param ts_list List of time series.
 #' @param num_part Numeric positive between 1 and the total number of parts
 #'     (num_total_parts). This value corresponds to the part (chunck) of the
 #'     total number of parts to be calculated.
@@ -81,7 +78,7 @@ ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
 #'     called several times (high num_total_parts). In this case, instead of
 #'     calculating all the combinations in each call, the user can calculate
 #'     it once and pass it via this parameter.
-#' @param measureFunc Function to be applied to all combinations
+#' @param dist_func Function to be applied to all combinations
 #'     of time series. This function should have at least two parameters
 #'     for each time series. Ex: function(ts1, ts2){ cor(ts1, ts2) }
 #' @param isSymetric Boolean. If the distance function is symmetric.
@@ -98,11 +95,11 @@ ts_dist <- function(tsList, measureFunc=tsdist_cor, isSymetric=TRUE,
 #'     for the time series i and j.
 #' @importFrom compiler cmpfun
 #' @export
-tsdist_parts_parallel <- function(tsList, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
+tsdist_parts_parallel <- function(ts_list, num_part, num_total_parts, combinations, dist_func=tsdist_cor,
                                 isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE,
                                 num_cores=1, ...) {
-    measureFuncCompiled <- cmpfun(measureFunc)
-    tsListLength = length(tsList)
+    measureFuncCompiled <- cmpfun(dist_func)
+    tsListLength = length(ts_list)
     combs = c()
     if (missing(combinations)) {
         if (isSymetric){
@@ -117,7 +114,7 @@ tsdist_parts_parallel <- function(tsList, num_part, num_total_parts, combination
     }
     dists = parallel::mclapply(combs, function(ids){
         d = tryCatch({
-            measureFuncCompiled(tsList[[ids[1]]], tsList[[ids[2]]], ...)
+            measureFuncCompiled(ts_list[[ids[1]]], ts_list[[ids[2]]], ...)
         }, error=function(cond) {
             if (warn_error)
                 warning("Error when calculating distance between time series ", ids[1], " and ", ids[2])
@@ -279,60 +276,44 @@ tsdist_file_parts_merge <- function(list_files, dir_path, num_elements, file_typ
 
 #' Absolute, positive, or negative correlation distance.
 #'
-#' Perfect positive returns zero and one means no  or negative correlations. The
-#' opposite occurs if positive_cor==F.
+#' Considering r the person correlation coefficient, this function returns
+#' either 1 - abs(r) if cor_type=="abs", 1 - pmax(0, r) if cor_type == "+",
+#' or 1 - pmax(0, r * -1) if cor_type == "-". Another possibility is to
+#' run a significance test to verify if the r is significant.
 #'
 #' @param ts1 Array. Time series 1
 #' @param ts2 Array. Time series 2
 #' @param cor_type String. "abs" (default), "+", or "-". "abs" considers the
 #'   correlation absolute value. "+" only positive correlations and "-" only
 #'   negative correlations.
-#' @param ... Additional parameters to cor() function.
+#' @param sig_test Run a statistical test. Return 0 if significant or 1 otherwise.
+#' @param sig_level The significance level to test if correlation is significant.
+#' @param ... Additional parameters to cor.test() function.
 #'
 #' @return Real value [0,1] where 0 means perfect positive (or negative
 #' if positive_cor==F) correlation and 1 no positive (or negative
 #' if positive_cor==F) correlation.
 #' @export
-tsdist_cor <- function(ts1, ts2, cor_type="abs", ...) {
-    r = cor(ts1, ts2, ...)
-    if (cor_type == "+") {
-        d_cor = 1 - pmax(0, r)
-    } else if (cor_type == "-") {
-        d_cor = 1 - pmax(0, r * -1)
-    } else {
-        d_cor = 1 - abs(r)
-    }
-    d_cor
-}
-
-
-#' Absolute, positive, or negative correlation distance with significance test.
-#'
-#' This function is similar to tsdist_cor(), but also performs a significance
-#' test to check if the absolute, positive, or negative correlation distance
-#' is significant. See cor.test() for more details. This function returns only
-#' zero (if significant) or one.
-#'
-#' @param ts1 Array. Time series 1
-#' @param ts2 Array. Time series 2
-#' @param cor_type String. "abs" (default), "+", or "-". "abs" considers the
-#'   correlation absolute value. "+" only positive correlations and "-" only
-#'   negative correlations.
-#' @param sig_level The significance level to test if correlation is significant.
-#'   See cor.test().
-#' @param ... Additional parameters to cor.test() function.
-#'
-#' @return Zero iff significant, or one otherwise.
-#' @export
-tsdist_cor_test <- function(ts1, ts2, cor_type="abs", sig_level=0.01, ...) {
+tsdist_cor <- function(ts1, ts2, cor_type="abs", sig_test=FALSE, sig_level=0.01, ...) {
+    # r = cor(ts1, ts2, ...)
     r_test = cor.test(ts1, ts2, ...)
     r = as.numeric(r_test$estimate)
     d_cor = 1
-    if (!is.na(corr$p.value) && corr$p.value <= sig_level) {
-        if ((cor_type == "+" & r > 0) | (cor_type == "-" & r < 0))
-            d_cor = 0
-        if (cor_type != "+" & cor_type != "-")
-            d_cor = 0
+    if (sig_test) {
+        if (!is.na(corr$p.value) && corr$p.value <= sig_level) {
+            if ((cor_type == "+" & r > 0) | (cor_type == "-" & r < 0))
+                d_cor = 0
+            if (cor_type != "+" & cor_type != "-")
+                d_cor = 0
+        }
+    } else {
+        if (cor_type == "+") {
+            d_cor = 1 - pmax(0, r)
+        } else if (cor_type == "-") {
+            d_cor = 1 - pmax(0, r * -1)
+        } else {
+            d_cor = 1 - abs(r)
+        }
     }
     d_cor
 }
@@ -497,6 +478,139 @@ tsdist_dtw <- function(ts1, ts2, ...) {
 }
 
 
+#' Event synchronization distance test.
+#'
+#' Quiroga, R. Q., Kreuz, T., & Grassberger, P. (2002). Event synchronization:
+#' a simple and fast method to measure synchronicity and time delay patterns.
+#' Physical review E, 66(4), 041904.
+#'
+#' Boers, N., Goswami, B., Rheinwalt, A., Bookhagen, B., Hoskins, B., & Kurths,
+#' J. (2019). Complex networks reveal global pattern of extreme-rainfall
+#' teleconnections. Nature, 566(7744), 373-377.
+#'
+#' @param ets1 Event time series 1 (one means an event, or zero otherwise)
+#' @param ets2 Event time series 2 (one means an event, or zero otherwise)
+#' @param sig_level The significance level to test if correlation is significant.
+#'   See cor.test().
+#' @param tau_max The maximum tau allowed ()
+#' @param sig_test Run a significance test. Return 0 if significant or 1 otherwise.
+#' @param reps Number of repetitions to construct the confidence interval
+#' @param method "quiroga" (default) for the default co-occurance count and
+#'   normalization or "boers" for the co-occurance count with tau_max and no
+#'   normalization.
+#'
+#' @return distance
+#' @export
+tsdist_es <- function(ets1, ets2, tau_max = +Inf, method=c("quiroga", "boers"),
+                      sig_test=FALSE, reps=100, sig_level=0.01) {
+    tts1 = which(ets1 > 0)
+    tts2 = which(ets2 > 0)
+    t1_num_events = length(tts1)
+    t2_num_events = length(tts2)
+    t1_length = length(ets1)
+    t2_length = length(ets2)
+    method = match.arg(method)
+    if (sig_test == FALSE & method == "boers")
+        stop("The method proposed by Boers et. al (no normalization) can only be
+             used in a statistical test (test=TRUE).")
+    if (sig_test) {
+        sampling_results = sapply(1:reps, function(i){
+            t1_random = sample(t1_length, t1_num_events)
+            t2_random = sample(t2_length, t2_num_events)
+            if (method == "quiroga")
+                sample_sim = tssim_event_sync(t1_random, t2_random, tau_max = tau_max,
+                                              normalization = "both")
+            if (method == "boers") {
+                sample_sim = tssim_event_sync(t1_random, t2_random, tau_max = tau_max,
+                                              normalization = "none")
+            }
+            sample_sim
+        })
+        threshold = quantile(sampling_results, 1 - sig_level)
+    }
+    if (method == "boers") {
+        sim = tssim_event_sync(tts1, tts2, tau_max = tau_max, normalization = "none")
+    } else {
+        sim = tssim_event_sync(tts1, tts2, tau_max = tau_max, normalization = "both")
+    }
+    if (sig_test) {
+        d = ifelse(sim >= threshold, 0, 1)
+    } else {
+        d = 1 - sim
+    }
+    as.numeric(d)
+}
+
+
+#' Event synchronization measure
+#'
+#' This function is an adapted version of the coocmetric function from
+#' the package mmpp. The differences are the introduction of a tau_max
+#' limitation factor and the optional normalization.
+#'
+#' Quiroga, R. Q., Kreuz, T., & Grassberger, P. (2002). Event synchronization:
+#' a simple and fast method to measure synchronicity and time delay patterns.
+#' Physical review E, 66(4), 041904.
+#'
+#' Boers, N., Goswami, B., Rheinwalt, A., Bookhagen, B., Hoskins, B., & Kurths,
+#' J. (2019). Complex networks reveal global pattern of extreme-rainfall
+#' teleconnections. Nature, 566(7744), 373-377.
+#'
+#' @param tts1 Time indices marking events in time series 1
+#' @param tts2 Time indices marking events in time series 2
+#' @param tau_max Max tau to be considered
+#' @param normalization Forms of normalization after the co-occurrence count.
+#'   Possible values "both" (default), "min", and "none". The Default is "both",
+#'   the original normalization defined by Quiroga et al: sqrt(N1*N2). This
+#'   normalization might be problematic when both time series have very different
+#'   number of events. Another possibility is to normalize the count by the "min"
+#'   length between both series. The interpretation now takes into account only
+#'   the series with less events. For example, considering two series, one with
+#'   many events and another with just a single event, the results can be 1
+#'   (total sync). The option "none" means no normalization and the method
+#'   returns the total count of synchronized events.
+#'
+#' @return Synchronization-based similarity
+tssim_event_sync <- function(tts1, tts2, tau_max = 1, normalization=c("both", "min", "none")) {
+    T1 = tts1
+    T2 = tts2
+    N1 = length(tts1)
+    N2 = length(tts2)
+    d1 = d2 = 0
+    grid = expand.grid(1:N1, 1:N2)
+    apply(grid, 1, function(x) {
+        k1 = x[1]
+        k2 = x[2]
+        g = c(T1[k1 + 1] - T1[k1], T1[k1] - T1[k1 -1], T2[k2 + 1] - T2[k2], T2[k2] - T2[k2 - 1])
+        g = min(na.exclude(g))/2
+        if (g > tau_max)
+            g = tau_max
+        id1 = T1[k1] - T2[k2]
+        id2 = T2[k2] - T1[k1]
+        if ((0 < id1) & (id1 < g)) {
+            d1 <<- d1 + 1
+        }
+        else if (id1 == 0) {
+            d1 <<- d1 + 1/2
+        }
+        if ((0 < id2) & (id2 < g)) {
+            d2 <<- d2 + 1
+        }
+        else if (id2 == 0) {
+            d2 <<- d2 + 1/2
+        }
+    })
+    val = (d1 + d2)
+    normalization = match.arg(normalization)
+    if (normalization == "both") {
+        val = val/sqrt(N1 * N2)
+    } else if(normalization == "min") {
+        val = val/min(length(tts1), length(tts2))
+    }
+    val
+}
+
+
 #' van Rossum distance with significance test
 #'
 #' This function compares the times which the events occur e.g., time indices
@@ -509,33 +623,38 @@ tsdist_dtw <- function(ts1, ts2, ...) {
 #' @param ets2 Event time series 2 (one means an event, or zero otherwise)
 #' @param tau Parameter for filtering function (See fmetric function from mmpp
 #'   package.)
-#' @param repetitions Number of repetitions to construct the confidence interval
+#' @param sig_test Run a statistical test. Return 0 if significant or 1 otherwise.
+#' @param reps Number of repetitions to construct the confidence interval
 #' @param sig_level The significance level to test if correlation is significant.
 #'
-#' @return 0 if significant synchronization or 1 otherwise
+#' @return distance
 #' @importFrom mmpp fmetric
 #' @export
-tsdist_vr_test <- function(ets1, ets2, tau = 1, repetitions=1000,
-                           sig_level=0.01) {
-    t1 = which(ets1 > 0)
-    t2 = which(ets2 > 0)
-    t1_num_events = length(t1)
-    t2_num_events = length(t2)
+tsdist_vr <- function(ets1, ets2, tau = 1, sig_test=FALSE,
+                           reps=100, sig_level=0.01) {
+    tts1 = which(ets1 > 0)
+    tts2 = which(ets2 > 0)
+    t1_num_events = length(tts1)
+    t2_num_events = length(tts2)
     t1_length = length(ets1)
     t2_length = length(ets2)
-    sampling_results = sapply(1:repetitions, function(i){
-        t1_random = sample(t1_length, t1_num_events)
-        t2_random = sample(t2_length, t2_num_events)
-        fmetric(t1_random, t2_random, measure = "dist", tau = tau)
-    })
-    threshold = quantile(sampling_results, sig_level)
-    d = fmetric(t1, t2, measure = "dist", tau = tau)
-    if (is.na(d)) {
-        d = 1
-    } else if (d < threshold) {
-        d = 0
-    } else {
-        d = 1
+    if (sig_test) {
+        sampling_results = sapply(1:reps, function(i){
+            t1_random = sample(t1_length, t1_num_events)
+            t2_random = sample(t2_length, t2_num_events)
+            fmetric(t1_random, t2_random, measure = "dist", tau = tau)
+        })
+        threshold = quantile(sampling_results, sig_level)
+    }
+    d = fmetric(tts1, tts2, measure = "dist", tau = tau)
+    if (sig_test) {
+        if (is.na(d)) {
+            d = 1
+        } else if (d < threshold) {
+            d = 0
+        } else {
+            d = 1
+        }
     }
     d
 }
@@ -549,17 +668,22 @@ tsdist_vr_test <- function(ets1, ets2, tau = 1, repetitions=1000,
 #' a statistical test using a shuffling approach to test significance. This
 #' implementation uses the CC.eca.ts function from the CoinCalc package.
 #'
-#' @param ets1
-#' @param ets2
+#' @param ets1 Event time series 1 (one means an event, or zero otherwise)
+#' @param ets2 Event time series 2 (one means an event, or zero otherwise)
+#' @param delT
+#' @param tau
+#' @param ...
+#'
+#' TODO: FINISH!!!
 #'
 #' @return
 #' @importFrom CoinCalc CC.eca.ts
 #' @export
-tsdist_eca <- function(ets1, ets2, delT, tau, ...) {
-    et1 = which(ets1==1)
-    et2 = which(ets2==1)
-    1 - CC.eca.es(et1, et2, delT = 1, tau = 1,
+tsdist_eca <- function(ets1, ets2, delT, tau, sym, ...) {
+    tts1 = which(ets1 > 0)
+    tts2 = which(ets2 > 0)
+    1 - CC.eca.es(tts1, tts2, delT = 1, tau = 1,
                   spanA = c(1, length(ets1)),
                   spanB = c(1, length(ets2)),
-                  sym = TRUE, ...)
+                  sym = sym, ...)
 }

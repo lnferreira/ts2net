@@ -5,11 +5,11 @@
 \title{Calculate distances between pairs of time series in part of a list.}
 \usage{
 tsdist_parts_parallel(
-  tsList,
+  ts_list,
   num_part,
   num_total_parts,
   combinations,
-  measureFunc = tsdist_cor,
+  dist_func = tsdist_cor,
   isSymetric = TRUE,
   error_value = NaN,
   warn_error = TRUE,
@@ -19,7 +19,7 @@ tsdist_parts_parallel(
 )
 }
 \arguments{
-\item{tsList}{List of time series.}
+\item{ts_list}{List of time series.}
 
 \item{num_part}{Numeric positive between 1 and the total number of parts
 (num_total_parts). This value corresponds to the part (chunck) of the
@@ -37,7 +37,7 @@ called several times (high num_total_parts). In this case, instead of
 calculating all the combinations in each call, the user can calculate
 it once and pass it via this parameter.}
 
-\item{measureFunc}{Function to be applied to all combinations
+\item{dist_func}{Function to be applied to all combinations
 of time series. This function should have at least two parameters
 for each time series. Ex: function(ts1, ts2){ cor(ts1, ts2) }}
 

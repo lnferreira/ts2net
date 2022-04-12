@@ -4,7 +4,7 @@
 \alias{tsdist_cor}
 \title{Absolute, positive, or negative correlation distance.}
 \usage{
-tsdist_cor(ts1, ts2, cor_type = "abs", ...)
+tsdist_cor(ts1, ts2, cor_type = "abs", sig_test = FALSE, sig_level = 0.01, ...)
 }
 \arguments{
 \item{ts1}{Array. Time series 1}
@@ -15,7 +15,11 @@ tsdist_cor(ts1, ts2, cor_type = "abs", ...)
 correlation absolute value. "+" only positive correlations and "-" only
 negative correlations.}
 
-\item{...}{Additional parameters to cor() function.}
+\item{sig_test}{Run a statistical test. Return 0 if significant or 1 otherwise.}
+
+\item{sig_level}{The significance level to test if correlation is significant.}
+
+\item{...}{Additional parameters to cor.test() function.}
 }
 \value{
 Real value [0,1] where 0 means perfect positive (or negative
@@ -23,6 +27,8 @@ if positive_cor==F) correlation and 1 no positive (or negative
 if positive_cor==F) correlation.
 }
 \description{
-Perfect positive returns zero and one means no  or negative correlations. The
-opposite occurs if positive_cor==F.
+Considering r the person correlation coefficient, this function returns
+either 1 - abs(r) if cor_type=="abs", 1 - pmax(0, r) if cor_type == "+",
+or 1 - pmax(0, r * -1) if cor_type == "-". Another possibility is to
+run a significance test to verify if the r is significant.
 }
