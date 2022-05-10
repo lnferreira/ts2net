@@ -104,6 +104,7 @@ net_knn_create <- function(D, k, num_cores=1) {
 #' @param ... Other parameters to kNN() function
 #'
 #' @return
+#' @importFrom dbscan kNN
 #' @export
 net_knn_create_approx <- function(D, k, ...) {
     link_list = kNN(D, k = k, ...)$id
