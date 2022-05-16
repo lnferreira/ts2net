@@ -5,7 +5,7 @@
 \title{Calculate distances between pairs of time series in a list.}
 \usage{
 ts_dist(
-  tsList,
+  ts_list,
   dist_func = tsdist_cor,
   is_symetric = TRUE,
   error_value = NaN,
@@ -15,7 +15,7 @@ ts_dist(
 )
 }
 \arguments{
-\item{tsList}{List of time series (arrays).}
+\item{ts_list}{List of time series (arrays).}
 
 \item{dist_func}{Function to be applied to all combinations
 of time series. This function should have at least two parameters
