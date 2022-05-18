@@ -13,31 +13,27 @@ tsnet_vg <- function(x, method=c("nvg", "hvg"), num_cores=1) {
     id_combs = combn(length(x), 2, simplify = F)
     method = match.arg(method)
     links = unlist(mclapply(id_combs, \(ids){
-        switch(method,
-               nvg={
-                   linked = TRUE
-                   if (abs(diff(ids))!=1) {
+        linked = TRUE
+        if (abs(diff(ids))!=1) {
+            switch(method,
+                   nvg={
                         for (i in seq(ids[1]+1, ids[2]-1)) {
                             if (x[i] >= x[ids[2]] + ((x[ids[1]]-x[ids[2]])*(ids[2]-i)/(ids[2]-ids[1]))) {
                                 linked = FALSE
                                 break
                             }
                         }
-                    }
-                    linked
-                },
-                hvg = {
-                    linked = TRUE
-                    if (abs(diff(ids))!=1) {
+                    },
+                    hvg = {
                         for (i in seq(ids[1]+1, ids[2]-1)) {
                             if (x[i] >= x[ids[1]] || x[i] >= x[ids[2]]) {
                                 linked = FALSE
                                 break
                             }
                         }
-                    }
-                    linked
-                })
+                    })
+        }
+        linked
     }, mc.cores = num_cores))
     links = do.call(rbind, id_combs[links])
     graph.data.frame(links, directed = F)
