@@ -15,10 +15,8 @@ tsnet_vg <- function(x, method=c("nvg", "hvg"), num_cores=1) {
     links = unlist(mclapply(id_combs, \(ids){
         switch(method,
                nvg={
-                   linked = FALSE
-                   if (abs(diff(ids))==1) {
-                       linked = TRUE
-                    } else {
+                   linked = TRUE
+                   if (abs(diff(ids))!=1) {
                         for (i in seq(ids[1]+1, ids[2]-1)) {
                             if (x[i] >= x[ids[2]] + ((x[ids[1]]-x[ids[2]])*(ids[2]-i)/(ids[2]-ids[1]))) {
                                 linked = FALSE
@@ -29,12 +27,10 @@ tsnet_vg <- function(x, method=c("nvg", "hvg"), num_cores=1) {
                     linked
                 },
                 hvg = {
-                    linked = FALSE
-                    if (abs(diff(ids))==1) {
-                        linked = TRUE
-                    } else {
+                    linked = TRUE
+                    if (abs(diff(ids))!=1) {
                         for (i in seq(ids[1]+1, ids[2]-1)) {
-                            if (x[i]>=x[ids[1]] | x[i]>=x[ids[2]]) {
+                            if (x[i] >= x[ids[1]] || x[i] >= x[ids[2]]) {
                                 linked = FALSE
                                 break
                             }
