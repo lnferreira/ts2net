@@ -20,6 +20,7 @@ Imports:
     infotheo,
     mmpp,
     CoinCalc,
-    dbscan
+    dbscan,
+    zoo
 Remotes:
     url::https://github.com/lnferreira/CoinCalc/raw/master/CoinCalc_2.0.tar.gz

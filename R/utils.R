@@ -129,3 +129,22 @@ random_ets <- function(ts_length, num_events, return_marked_times=FALSE) {
         ets = which(ets == 1)
     ets
 }
+
+#' Extract time windows from a time series
+#'
+#' This function is useful when constructing a network from a single
+#' time series. The returned list can be directly used to calculate
+#' the distance matrix D with ts_dist().
+#'
+#' @param x time series
+#' @param width window length
+#' @param by Window step. This is the number of values in and out during
+#'   the window rollover process.
+#'
+#' @return List of windows
+#' @importFrom zoo rollapply
+#' @export
+ts_to_windows <- function(x, width, by=1) {
+    tss = rollapply(x, width=width, by=by, FUN=\(x) x)
+    lapply(1:nrow(tss), \(i) tss[i,])
+}
