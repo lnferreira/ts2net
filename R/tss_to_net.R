@@ -18,7 +18,7 @@
 #'
 #' @return a igraph network
 #' @export
-net_epsNN <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
+net_enn <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
                                weighted=FALSE, invert_dist_as_weight = TRUE,
                                bipartite=FALSE, bipartite_mode = "out", addColRowNames=TRUE) {
     nas = is.na(D)
@@ -54,8 +54,8 @@ net_epsNN <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
     net
 }
 
-#' Construct an approximated knn-network (faster, but approximated) from
-#' a distance matrix.
+#' Construct an approximated epsilon-network (faster, but approximated) from
+#' a distance matrix. Some actual nearest neighbors may be omitted.
 #'
 #' @param D Distance matrix
 #' @param k (Integer) k nearest-nearest neighbors where each time seires
@@ -65,13 +65,15 @@ net_epsNN <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
 #' @return
 #' @importFrom dbscan kNN
 #' @export
-net_epsNN_approx <- function(D, k, ...) {
-    link_list = kNN(D, k = k, ...)$id
+net_enn_approx <- function(D, k, ...) {
+    link_list = frNN(D, eps = eps, ...)$id
     link_list = lapply(1:nrow(link_list), function(i) unname(link_list[i,]))
     names(link_list) = 1:length(link_list)
     net = graph_from_adj_list(link_list, mode="all", duplicate = F)
     V(net)$name = colnames(D)
     simplify(net)
+
+    # TODO IMPLEMENT
 }
 
 #' Creates a weighted network.
