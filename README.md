@@ -4,7 +4,7 @@
 
 ### Installation
 
-To install the ```ts2net``` package, please run the following line in R:
+To install the ```ts2net``` package, run the following line in R:
 
 ``` r
 install.packages("ts2net")

@@ -18,7 +18,7 @@
 #'
 #' @return a igraph network
 #' @export
-net_epsilon_create <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
+net_epsNN <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
                                weighted=FALSE, invert_dist_as_weight = TRUE,
                                bipartite=FALSE, bipartite_mode = "out", addColRowNames=TRUE) {
     nas = is.na(D)
@@ -54,6 +54,26 @@ net_epsilon_create <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
     net
 }
 
+#' Construct an approximated knn-network (faster, but approximated) from
+#' a distance matrix.
+#'
+#' @param D Distance matrix
+#' @param k (Integer) k nearest-nearest neighbors where each time seires
+#' will be connected to
+#' @param ... Other parameters to kNN() function from dbscan package.
+#'
+#' @return
+#' @importFrom dbscan kNN
+#' @export
+net_epsNN_approx <- function(D, k, ...) {
+    link_list = kNN(D, k = k, ...)$id
+    link_list = lapply(1:nrow(link_list), function(i) unname(link_list[i,]))
+    names(link_list) = 1:length(link_list)
+    net = graph_from_adj_list(link_list, mode="all", duplicate = F)
+    V(net)$name = colnames(D)
+    simplify(net)
+}
+
 #' Creates a weighted network.
 #'
 #' A link is created for each pair of nodes, except if the distance is
@@ -66,7 +86,7 @@ net_epsilon_create <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
 #' @return Fully connected network
 #' @export
 net_weighted <- function(D, invert_dist_as_weight=TRUE) {
-    net_epsilon_create(D = D, epsilon = +Inf, weighted = TRUE,
+    net_epsNN_create(D = D, epsilon = +Inf, weighted = TRUE,
                        invert_dist_as_weight = invert_dist_as_weight)
 }
 
@@ -80,7 +100,7 @@ net_weighted <- function(D, invert_dist_as_weight=TRUE) {
 #'
 #' @return
 #' @export
-net_knn_create <- function(D, k, num_cores=1) {
+net_knn <- function(D, k, num_cores=1) {
     ddim = dim(D)
     D = D + diag(Inf, nrow = ddim[1], ncol = ddim[2])
     A = mclapply(1:nrow(D), function(i){
@@ -96,17 +116,18 @@ net_knn_create <- function(D, k, num_cores=1) {
     simplify(net)
 }
 
-#' Construct a knn-network (faster, but approximated) from a distance matrix.
+#' Construct an approximated knn-network (faster, but approximated) from
+#' a distance matrix.
 #'
 #' @param D Distance matrix
 #' @param k (Integer) k nearest-nearest neighbors where each time seires
 #' will be connected to
-#' @param ... Other parameters to kNN() function
+#' @param ... Other parameters to kNN() function from dbscan package.
 #'
 #' @return
 #' @importFrom dbscan kNN
 #' @export
-net_knn_create_approx <- function(D, k, ...) {
+net_knn_approx <- function(D, k, ...) {
     link_list = kNN(D, k = k, ...)$id
     link_list = lapply(1:nrow(link_list), function(i) unname(link_list[i,]))
     names(link_list) = 1:length(link_list)
