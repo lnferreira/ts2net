@@ -6,7 +6,7 @@
 \usage{
 net_enn(
   D,
-  epsilon,
+  eps,
   treat_NA_as = 1,
   is_dist_symetric = T,
   weighted = FALSE,
@@ -19,7 +19,7 @@ net_enn(
 \arguments{
 \item{D}{Distance matrix}
 
-\item{epsilon}{the threshold value to be considered a link. Only values lower
+\item{eps}{the threshold value to be considered a link. Only values lower
 or equal to epsilon become 1.}
 
 \item{treat_NA_as}{A numeric value, usually 1, that represent NA values in the

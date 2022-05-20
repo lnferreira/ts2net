@@ -2,23 +2,25 @@
 % Please edit documentation in R/tss_to_net.R
 \name{net_enn_approx}
 \alias{net_enn_approx}
-\title{Construct an approximated epsilon-network (faster, but approximated) from
-a distance matrix. Some actual nearest neighbors may be omitted.}
+\title{Construct an approximated epsilon neighbor network (faster, but
+approximated) from a distance matrix. Some actual nearest neighbors
+may be omitted.}
 \usage{
-net_enn_approx(D, k, ...)
+net_enn_approx(D, eps, ...)
 }
 \arguments{
 \item{D}{Distance matrix}
 
-\item{k}{(Integer) k nearest-nearest neighbors where each time seires
+\item{eps}{(Integer) k nearest-nearest neighbors where each time seires
 will be connected to}
 
-\item{...}{Other parameters to kNN() function from dbscan package.}
+\item{...}{Other parameters to frNN() function from dbscan package.}
 }
 \value{
 
 }
 \description{
-Construct an approximated epsilon-network (faster, but approximated) from
-a distance matrix. Some actual nearest neighbors may be omitted.
+Construct an approximated epsilon neighbor network (faster, but
+approximated) from a distance matrix. Some actual nearest neighbors
+may be omitted.
 }

@@ -1,7 +1,7 @@
 #' Construct an epsilon-network from a distance matrix.
 #'
 #' @param D Distance matrix
-#' @param epsilon the threshold value to be considered a link. Only values lower
+#' @param eps the threshold value to be considered a link. Only values lower
 #'     or equal to epsilon become 1.
 #' @param treat_NA_as A numeric value, usually 1, that represent NA values in the
 #'     distance matrix
@@ -18,7 +18,7 @@
 #'
 #' @return a igraph network
 #' @export
-net_enn <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
+net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=T,
                                weighted=FALSE, invert_dist_as_weight = TRUE,
                                bipartite=FALSE, bipartite_mode = "out", addColRowNames=TRUE) {
     nas = is.na(D)
@@ -30,12 +30,12 @@ net_enn <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
             if(any(D > 1))
                 stop("When invert_dist_as_weight is TRUE, the edge weight is 1 - d. In this case,
                      all values in the distance matrix D should be in the interval [0,1]. ")
-            n[D <= epsilon] = 1 - D[D <= epsilon]
+            n[D <= eps] = 1 - D[D <= eps]
         } else {
-            n[D <= epsilon] = D[D <= epsilon]
+            n[D <= eps] = D[D <= eps]
         }
     } else {
-        n[D <= epsilon] = 1
+        n[D <= eps] = 1
     }
     if (addColRowNames){
         colnames(n) = colnames(D)
@@ -54,26 +54,24 @@ net_enn <- function(D, epsilon, treat_NA_as=1, is_dist_symetric=T,
     net
 }
 
-#' Construct an approximated epsilon-network (faster, but approximated) from
-#' a distance matrix. Some actual nearest neighbors may be omitted.
+#' Construct an approximated epsilon neighbor network (faster, but
+#' approximated) from a distance matrix. Some actual nearest neighbors
+#' may be omitted.
 #'
 #' @param D Distance matrix
-#' @param k (Integer) k nearest-nearest neighbors where each time seires
+#' @param eps (Integer) k nearest-nearest neighbors where each time seires
 #' will be connected to
-#' @param ... Other parameters to kNN() function from dbscan package.
+#' @param ... Other parameters to frNN() function from dbscan package.
 #'
 #' @return
-#' @importFrom dbscan kNN
+#' @importFrom dbscan frNN
 #' @export
-net_enn_approx <- function(D, k, ...) {
-    link_list = frNN(D, eps = eps, ...)$id
-    link_list = lapply(1:nrow(link_list), function(i) unname(link_list[i,]))
+net_enn_approx <- function(D, eps, ...) {
+    link_list = frNN(as.dist(D), eps = eps, ...)$id
     names(link_list) = 1:length(link_list)
     net = graph_from_adj_list(link_list, mode="all", duplicate = F)
     V(net)$name = colnames(D)
     simplify(net)
-
-    # TODO IMPLEMENT
 }
 
 #' Creates a weighted network.
@@ -88,8 +86,8 @@ net_enn_approx <- function(D, k, ...) {
 #' @return Fully connected network
 #' @export
 net_weighted <- function(D, invert_dist_as_weight=TRUE) {
-    net_epsNN_create(D = D, epsilon = +Inf, weighted = TRUE,
-                       invert_dist_as_weight = invert_dist_as_weight)
+    net_enn(D = D, eps = +Inf, weighted = TRUE,
+            invert_dist_as_weight = invert_dist_as_weight)
 }
 
 
@@ -130,7 +128,7 @@ net_knn <- function(D, k, num_cores=1) {
 #' @importFrom dbscan kNN
 #' @export
 net_knn_approx <- function(D, k, ...) {
-    link_list = kNN(D, k = k, ...)$id
+    link_list = kNN(as.dist(D), k = k, ...)$id
     link_list = lapply(1:nrow(link_list), function(i) unname(link_list[i,]))
     names(link_list) = 1:length(link_list)
     net = graph_from_adj_list(link_list, mode="all", duplicate = F)
