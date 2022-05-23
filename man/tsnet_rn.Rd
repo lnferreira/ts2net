@@ -13,7 +13,11 @@ tsnet_rn(x, radius, embedding.dim, time.lag = 1, do.plot = FALSE, ...)
 points to be considered a recurrence.}
 
 \item{embedding.dim}{Integer denoting the dimension in which
-we shall embed the time.series.}
+we shall embed the time.series. If missing, the embedding
+dimensions is estimated using `estimateEmbeddingDim()` from
+\pkg{nonlinearTseries}. The constructed igraph network has
+the estimated dimension (and other info) as a parameter.
+For example: net$embedding_dim}
 
 \item{time.lag}{Integer denoting the number of time steps that
 will be use to construct the Takens' vectors.}

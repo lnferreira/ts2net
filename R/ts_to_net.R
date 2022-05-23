@@ -50,7 +50,11 @@ tsnet_vg <- function(x, method=c("nvg", "hvg"), num_cores=1) {
 #' @param radius Maximum distance between two phase-space
 #'   points to be considered a recurrence.
 #' @param embedding.dim Integer denoting the dimension in which
-#'   we shall embed the time.series.
+#'   we shall embed the time.series. If missing, the embedding
+#'   dimensions is estimated using `estimateEmbeddingDim()` from
+#'   \pkg{nonlinearTseries}. The constructed igraph network has
+#'   the estimated dimension (and other info) as a parameter.
+#'   For example: net$embedding_dim
 #' @param time.lag Integer denoting the number of time steps that
 #'   will be use to construct the Takens' vectors.
 #' @param do.plot Boolean. Show recurrence plot (default = FALSE)
