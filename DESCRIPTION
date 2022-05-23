@@ -21,6 +21,7 @@ Imports:
     mmpp,
     CoinCalc,
     dbscan,
-    zoo
+    zoo,
+    nonlinearTseries
 Remotes:
     url::https://github.com/lnferreira/CoinCalc/raw/master/CoinCalc_2.0.tar.gz
