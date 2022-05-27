@@ -25,3 +25,6 @@ Imports:
     nonlinearTseries
 Remotes:
     url::https://github.com/lnferreira/CoinCalc/raw/master/CoinCalc_2.0.tar.gz
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
