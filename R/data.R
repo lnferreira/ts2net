@@ -28,3 +28,30 @@ dataset_sincos_generate <- function(num_sin_series = 25, num_cos_series = 25,
         ds = lapply(ds, function(y) data.frame(x=x, y=y))
     ds
 }
+
+
+#' Random event time series generator
+#'
+#' It generates an event time series with length ts_length with
+#' num_events events considering a uniform probability distribution.
+#'
+#' @param ts_length Time series Length
+#' @param num_events The number of events
+#' @param return_marked_times Return the time indices (marked points) where
+#'   the events occur.
+#'
+#' @return An event (binary, 1: event, 0 otherwise) time series
+#' @export
+random_ets <- function(ts_length, num_events, return_marked_times=FALSE) {
+    if (num_events > ts_length) {
+        warning("Desired number of events (", num_events, ") larger
+                than desired time series length (", ts_length, "). Returning ",
+                ts_length, " events.")
+        num_events = ts_length
+    }
+    ets = array(0, ts_length)
+    ets[sample(ts_length, num_events)] = 1
+    if (return_marked_times)
+        ets = which(ets == 1)
+    ets
+}
