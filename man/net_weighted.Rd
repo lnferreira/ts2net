@@ -9,7 +9,9 @@ net_weighted(D, invert_dist_as_weight = TRUE)
 \arguments{
 \item{D}{Distance matrix. All values must be between [0,1].}
 
-\item{max_dist_value.}{The value}
+\item{invert_dist_as_weight}{Boolean, if weighted == TRUE, then the weights
+become 1 - distance. This is the default behavior since most network
+measures interpret higher weights as stronger connection.}
 }
 \value{
 Fully connected network

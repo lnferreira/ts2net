@@ -63,8 +63,8 @@ net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=T,
 #' will be connected to
 #' @param ... Other parameters to frNN() function from dbscan package.
 #'
-#' @return
 #' @importFrom dbscan frNN
+#' @return Approximated epsilon nearest-neighbor network
 #' @export
 net_enn_approx <- function(D, eps, ...) {
     link_list = frNN(as.dist(D), eps = eps, ...)$id
@@ -80,8 +80,10 @@ net_enn_approx <- function(D, eps, ...) {
 #' maximum (1). In network science, stronger links are commonly represented
 #' by high values. For this reason, the link weights returned are 1 - D.
 #'
+#' @param invert_dist_as_weight Boolean, if weighted == TRUE, then the weights
+#'     become 1 - distance. This is the default behavior since most network
+#'     measures interpret higher weights as stronger connection.
 #' @param D Distance matrix. All values must be between [0,1].
-#' @param max_dist_value. The value
 #'
 #' @return Fully connected network
 #' @export
@@ -98,7 +100,7 @@ net_weighted <- function(D, invert_dist_as_weight=TRUE) {
 #' will be connected to
 #' @param num_cores (Integer) Number of cores to use.
 #'
-#' @return
+#' @return k nearest-neighbor network
 #' @export
 net_knn <- function(D, k, num_cores=1) {
     ddim = dim(D)
@@ -124,8 +126,9 @@ net_knn <- function(D, k, num_cores=1) {
 #' will be connected to
 #' @param ... Other parameters to kNN() function from dbscan package.
 #'
-#' @return
+#' @return Approximated k nearest-neighbor network
 #' @importFrom dbscan kNN
+#' @importFrom stats as.dist
 #' @export
 net_knn_approx <- function(D, k, ...) {
     link_list = kNN(as.dist(D), k = k, ...)$id

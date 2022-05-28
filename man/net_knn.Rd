@@ -15,7 +15,7 @@ will be connected to}
 \item{num_cores}{(Integer) Number of cores to use.}
 }
 \value{
-
+k nearest-neighbor network
 }
 \description{
 Construct a knn-network from a distance matrix.

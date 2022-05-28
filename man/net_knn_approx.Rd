@@ -16,7 +16,7 @@ will be connected to}
 \item{...}{Other parameters to kNN() function from dbscan package.}
 }
 \value{
-
+Approximated k nearest-neighbor network
 }
 \description{
 Construct an approximated knn-network (faster, but approximated) from

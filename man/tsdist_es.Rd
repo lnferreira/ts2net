@@ -29,8 +29,7 @@ normalization.}
 
 \item{reps}{Number of repetitions to construct the confidence interval}
 
-\item{sig_level}{The significance level to test if correlation is significant.
-See cor.test().}
+\item{sig_level}{The significance level to test if correlation is significant.}
 }
 \value{
 distance

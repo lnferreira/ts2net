@@ -17,7 +17,7 @@ will be connected to}
 \item{...}{Other parameters to frNN() function from dbscan package.}
 }
 \value{
-
+Approximated epsilon nearest-neighbor network
 }
 \description{
 Construct an approximated epsilon neighbor network (faster, but

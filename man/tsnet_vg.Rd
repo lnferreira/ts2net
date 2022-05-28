@@ -4,7 +4,7 @@
 \alias{tsnet_vg}
 \title{Construct the visibility graph from a time series}
 \usage{
-tsnet_vg(x, method = c("nvg", "hvg"), num_cores = 1)
+tsnet_vg(x, method = c("nvg", "hvg"), limit = +Inf, num_cores = 1)
 }
 \arguments{
 \item{x}{Array. Time series}
@@ -12,11 +12,15 @@ tsnet_vg(x, method = c("nvg", "hvg"), num_cores = 1)
 \item{method}{String. Construction method: "nvg" (default) for
 Natural visibility graph, "hvg" horizontal visibility graph.}
 
+\item{limit}{Positive integer. The maximum temporal distance (indexes)
+allowed in the visibility. This parameter limits the max visibility.}
+
 \item{num_cores}{Number of cores (default = 1).}
 }
 \value{
 visibility graph
 }
 \description{
-Construct the visibility graph from a time series
+TODO: limit distance
+TODO: weights
 }

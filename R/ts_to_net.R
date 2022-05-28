@@ -2,14 +2,19 @@
 
 #' Construct the visibility graph from a time series
 #'
+#' TODO: limit distance
+#' TODO: weights
+#'
 #' @param x Array. Time series
 #' @param method String. Construction method: "nvg" (default) for
 #'   Natural visibility graph, "hvg" horizontal visibility graph.
 #' @param num_cores Number of cores (default = 1).
+#' @param limit Positive integer. The maximum temporal distance (indexes)
+#'   allowed in the visibility. This parameter limits the max visibility.
 #'
 #' @return visibility graph
 #' @export
-tsnet_vg <- function(x, method=c("nvg", "hvg"), num_cores=1) {
+tsnet_vg <- function(x, method=c("nvg", "hvg"), limit=+Inf, num_cores=1) {
     id_combs = combn(length(x), 2, simplify = F)
     method = match.arg(method)
     links = unlist(mclapply(id_combs, \(ids){

@@ -27,6 +27,7 @@ dist_matrix_normalize <- function(D, to=c(0,1)) {
 #' @param percentile (Float) The desired percentile of lower distances.
 #' @param is_D_symetric (Boolean)
 #'
+#' @importFrom stats quantile
 #' @return Distance percentile value.
 #' @export
 dist_percentile <- function(D, percentile = 0.1, is_D_symetric=TRUE) {

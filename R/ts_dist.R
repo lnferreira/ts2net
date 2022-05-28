@@ -20,7 +20,9 @@
 #' @return A distance or similarity matrix M whose position M_{ij}
 #'     corresponds to distance or similarity value between time series
 #'     i and j.
+#' @import igraph parallel utils
 #' @importFrom compiler cmpfun
+#' @importFrom utils combn
 #' @export
 ts_dist <- function(ts_list, dist_func=tsdist_cor, is_symetric=TRUE,
                           error_value=NaN, warn_error=TRUE, num_cores=1, ...) {
@@ -291,6 +293,7 @@ tsdist_file_parts_merge <- function(list_files, dir_path, num_elements, file_typ
 #' @param sig_level The significance level to test if correlation is significant.
 #' @param ... Additional parameters to cor.test() function.
 #'
+#' @importFrom stats cor.test
 #' @return Real value [0,1] where 0 means perfect positive (or negative
 #' if positive_cor==F) correlation and 1 no positive (or negative
 #' if positive_cor==F) correlation.
@@ -301,7 +304,7 @@ tsdist_cor <- function(ts1, ts2, cor_type="abs", sig_test=FALSE, sig_level=0.01,
     r = as.numeric(r_test$estimate)
     d_cor = 1
     if (sig_test) {
-        if (!is.na(corr$p.value) && corr$p.value <= sig_level) {
+        if (!is.na(r_test$p.value) && r_test$p.value <= sig_level) {
             if ((cor_type == "+" & r > 0) | (cor_type == "-" & r < 0))
                 d_cor = 0
             if (cor_type != "+" & cor_type != "-")
@@ -335,6 +338,7 @@ tsdist_cor <- function(ts1, ts2, cor_type="abs", sig_test=FALSE, sig_level=0.01,
 #' @param lag_max Integer. Default = 10.
 #' @param return_lag Also returns the time lag that leads to the shortest distances.
 #'
+#' @importFrom stats ccf
 #' @return Distance
 #' @export
 tsdist_ccf <- function(ts1, ts2, type=c("correlation", "covariance"),
@@ -415,9 +419,10 @@ tsdist_voi <- function(ts1, ts2, nbins = c("sturges", "freedman-diaconis", "scot
 #' @param mi_method The name of the entropy estimator used in the functions
 #'   mutinformation() and entropy() from the infotheo package.
 #'
+#' @importFrom infotheo discretize mutinformation entropy
+#' @importFrom grDevices nclass.Sturges nclass.FD nclass.scott
 #' @return Distance
 #' @export
-#' @importFrom infotheo discretize mutinformation entropy
 tsdist_nmi <- function(ts1, ts2, nbins = c("sturges", "freedman-diaconis", "scott"),
                        normalization_method = c("sum", "min", "max", "sqrt"),
                        mi_method="emp") {
@@ -492,7 +497,6 @@ tsdist_dtw <- function(ts1, ts2, ...) {
 #' @param ets1 Event time series 1 (one means an event, or zero otherwise)
 #' @param ets2 Event time series 2 (one means an event, or zero otherwise)
 #' @param sig_level The significance level to test if correlation is significant.
-#'   See cor.test().
 #' @param tau_max The maximum tau allowed ()
 #' @param sig_test Run a significance test. Return 0 if significant or 1 otherwise.
 #' @param reps Number of repetitions to construct the confidence interval
@@ -571,6 +575,7 @@ tsdist_es <- function(ets1, ets2, tau_max = +Inf, method=c("quiroga", "boers"),
 #'   (total sync). The option "none" means no normalization and the method
 #'   returns the total count of synchronized events.
 #'
+#' @importFrom stats na.exclude
 #' @return Synchronization-based similarity
 tssim_event_sync <- function(tts1, tts2, tau_max = 1, normalization=c("both", "min", "none")) {
     T1 = tts1

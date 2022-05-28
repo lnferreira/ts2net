@@ -22,7 +22,9 @@ Imports:
     CoinCalc,
     dbscan,
     zoo,
-    nonlinearTseries
+    nonlinearTseries,
+    stats,
+    utils
 Remotes:
     url::https://github.com/lnferreira/CoinCalc/raw/master/CoinCalc_2.0.tar.gz
 Suggests: 
