@@ -1,3 +1,5 @@
+[![R-CMD-check](https://github.com/lnferreira/ts2net/workflows/R-CMD-check/badge.svg)](https://github.com/lnferreira/ts2net/actions)
+
 # ts2net <img src="man/figures/logo.png" align="right" height="139" />
 
 ```ts2net``` is an R package to transform one or multiples time series into networks.
@@ -25,7 +27,7 @@ Please cite this paper if you used ```ts2net``` package in a publication.
   author        = "Ferreira, Leonardo N",
   month         =  Apr,
   year          =  2022,
-  copyright     = "https://github.com/lnferreira/ts2net/blob/main/LICENSE.md",
+  copyright     = "https://github.com/lnferreira/ts2net/blob/main/LICENSE",
   archivePrefix = "arXiv",
   primaryClass  = "",
   eprint        = ""
