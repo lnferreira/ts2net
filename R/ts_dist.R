@@ -702,8 +702,6 @@ tsdist_vr <- function(ets1, ets2, tau = 1, sig_test=FALSE,
 #'   significance test.
 #'
 #' @return Distance
-#' @importFrom CoinCalc CC.eca.ts
-#' @export
 tsdist_eca <- function(ets1, ets2, delT=0, tau=0, sym=TRUE, sig_test=FALSE,
                        sig_method=c("poisson", "wt.surrogate", "shuffle.surrogate"),
                        sig_level=0.01, reps = 100) {

@@ -1,6 +1,6 @@
-[![R-CMD-check](https://github.com/lnferreira/ts2net/workflows/R-CMD-check/badge.svg)](https://github.com/lnferreira/ts2net/actions)
-
 # ts2net <img src="man/figures/logo.png" align="right" height="139" />
+
+[![R-CMD-check](https://github.com/lnferreira/ts2net/workflows/R-CMD-check/badge.svg)](https://github.com/lnferreira/ts2net/actions)
 
 ```ts2net``` is an R package to transform one or multiples time series into networks.
 
