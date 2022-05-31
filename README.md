@@ -3,7 +3,7 @@
 [![R-CMD-check](https://github.com/lnferreira/ts2net/workflows/R-CMD-check/badge.svg)](https://github.com/lnferreira/ts2net/actions)
 [![Codecov test coverage](https://codecov.io/gh/lnferreira/ts2net/branch/main/graph/badge.svg?token=KFSXU3IE7C)](https://codecov.io/gh/lnferreira/ts2net)
 
-```ts2net``` is an R package to transform one or multiples time series into networks.
+```ts2net``` is an R package to transform one or multiple time series into networks. 
 
 ### Installation
 
@@ -20,11 +20,11 @@ remotes::install_github("lnferreira/ts2net")
 
 ### Reference
 
-Please cite this paper if you used ```ts2net``` package in a publication.
+Please cite this paper if you used ```ts2net``` in a publication:
 
 ```
 @article{ts2net,
-  title         = "ts2net: From Time Series to Networks in R",
+  title         = "From Time Series to Networks in R with ts2net",
   author        = "Ferreira, Leonardo N",
   month         =  May,
   year          =  2022,
@@ -36,7 +36,7 @@ Please cite this paper if you used ```ts2net``` package in a publication.
 
 ### License
 
-```ts2net``` is distributed under [MIT license](LICENSE.md).
+```ts2net``` is distributed under the [MIT license](LICENSE).
 
 ### Contact
 
