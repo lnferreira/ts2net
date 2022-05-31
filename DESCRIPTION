@@ -2,10 +2,14 @@ Package: ts2net
 Type: Package
 Title: From Time Series to Networks 
 Version: 0.1.0
-Author: Leonardo N. Ferreira <ferreira@leonardonascimento.com>
+Authors@R: 
+    person("Leonardo", "N. Ferreira", , "ferreira@leonardonascimento.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-1445-0590"))
 Maintainer: Leonardo N. Ferreira <ferreira@leonardonascimento.com>
 Description: A package to transform time series into networks.
 License: MIT + file LICENSE
+URL: https://github.com/lnferreira/ts2net
+BugReports: https://github.com/lnferreira/ts2net/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2

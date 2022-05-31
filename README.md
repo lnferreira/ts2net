@@ -2,6 +2,7 @@
 
 [![R-CMD-check](https://github.com/lnferreira/ts2net/workflows/R-CMD-check/badge.svg)](https://github.com/lnferreira/ts2net/actions)
 [![Codecov test coverage](https://codecov.io/gh/lnferreira/ts2net/branch/main/graph/badge.svg?token=KFSXU3IE7C)](https://codecov.io/gh/lnferreira/ts2net)
+# [![License](https://img.shields.io/github/license/lnferreira/ts2net)](https://github.com/lnferreira/ts2net/blob/main/LICENSE)
 
 ```ts2net``` is an R package to transform one or multiple time series into networks. 
 
