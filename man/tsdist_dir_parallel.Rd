@@ -13,7 +13,7 @@ tsdist_dir_parallel(
   isSymetric = TRUE,
   error_value = NaN,
   warn_error = TRUE,
-  simplify = FALSE,
+  simplify = TRUE,
   num_cores = 1,
   ...
 )
@@ -45,7 +45,7 @@ the distance for a pair of time series.}
 \item{warn_error}{Boolean. If TRUE (default), a warning will rise when an
 error occur during the calculations.}
 
-\item{simplify}{Boolean. If FALSE (default), returns a list of one (
+\item{simplify}{Boolean. If FALSE, returns a list of one (
 if isSymetric == FALSE) or two elements (if isSymetric == TRUE).}
 
 \item{num_cores}{Numeric. Number of cores}

@@ -162,7 +162,7 @@ tsdist_parts_parallel <- function(ts_list, num_part, num_total_parts, combinatio
 #'     for each time series. Ex: function(ts1, ts2){ cor(ts1, ts2) }
 #' @param isSymetric Boolean. If the distance function is symmetric.
 #' @param num_cores Numeric. Number of cores
-#' @param simplify Boolean. If FALSE (default), returns a list of one (
+#' @param simplify Boolean. If FALSE, returns a list of one (
 #'     if isSymetric == FALSE) or two elements (if isSymetric == TRUE).
 #' @param error_value The value returned if an error occur when calculating a
 #'     the distance for a pair of time series.
@@ -177,17 +177,17 @@ tsdist_parts_parallel <- function(ts_list, num_part, num_total_parts, combinatio
 #' @importFrom compiler cmpfun
 #' @export
 tsdist_dir_parallel <- function(input_dir, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
-                              isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=FALSE,
+                              isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE,
                               num_cores=1, ...) {
     measureFuncCompiled <- cmpfun(measureFunc)
     list_files = list.files(path = input_dir, full.names = T, pattern = "RDS")
-    tsListLength = length(list_files)
+    ts_list_length = length(list_files)
     combs = c()
     if (missing(combinations)) {
         if (isSymetric){
-            combs = combn(tsListLength, 2, simplify = FALSE)
+            combs = combn(ts_list_length, 2, simplify = FALSE)
         } else {
-            combs = as.matrix(expand.grid(1:tsListLength, 1:tsListLength))
+            combs = as.matrix(expand.grid(1:ts_list_length, 1:ts_list_length))
             combs = lapply(1:nrow(combs), function(i) combs[i,])
         }
         combs = split(combs, ceiling(seq_along(combs)/(length(combs) / num_total_parts)))[[num_part]]
@@ -232,7 +232,7 @@ tsdist_dir_parallel <- function(input_dir, num_part, num_total_parts, combinatio
 #' @return Distance matrix D
 #' @export
 tsdist_parts_merge <- function(list_dfs, num_elements) {
-    D = matrix(1, num_elements, num_elements)
+    D = matrix(0, num_elements, num_elements)
     for (df_d in list_dfs) {
         D[as.matrix(df_d[,c("i", "j")])] = df_d$dist
     }
@@ -262,7 +262,7 @@ tsdist_parts_merge <- function(list_dfs, num_elements) {
 tsdist_file_parts_merge <- function(list_files, dir_path, num_elements, file_type="RDS") {
     if (missing(list_files))
         files = list.files(dir_path, pattern = file_type, include.dirs = F, full.names = T)
-    D = matrix(1, num_elements, num_elements)
+    D = matrix(0, num_elements, num_elements)
     for (file in files) {
         if (file_type == "RDS") {
             df_d = readRDS(file)
