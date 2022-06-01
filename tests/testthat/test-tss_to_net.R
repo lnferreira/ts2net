@@ -10,8 +10,11 @@ test_that("Create knn network", {
 test_that("Create enn network", {
     ts_list = dataset_sincos_generate(num_sin_series = 5, num_cos_series = 5, ts_length = 50)
     D = ts_dist(ts_list)
-    net = net_enn(D = D, eps = 0.5)
+    colnames(D) = rownames(D) = LETTERS[1:10]
+    D[1,10] = D[10,1] = NA
+    net = net_enn(D = D, eps = 0.5, treat_NA_as = T)
     expect_equal(vcount(net), 10)
+    expect_true(all(V(net)$name == LETTERS[1:10]))
 })
 
 
