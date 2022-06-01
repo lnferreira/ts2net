@@ -2,7 +2,6 @@
 
 #' Construct the visibility graph from a time series
 #'
-#' TODO: limit distance
 #' TODO: weights
 #'
 #' @param x Array. Time series
@@ -19,24 +18,28 @@ tsnet_vg <- function(x, method=c("nvg", "hvg"), limit=+Inf, num_cores=1) {
     method = match.arg(method)
     links = unlist(mclapply(id_combs, \(ids){
         linked = TRUE
-        if (abs(diff(ids))!=1) {
-            switch(method,
-                   nvg={
-                        for (i in seq(ids[1]+1, ids[2]-1)) {
-                            if (x[i] >= x[ids[2]] + ((x[ids[1]]-x[ids[2]])*(ids[2]-i)/(ids[2]-ids[1]))) {
-                                linked = FALSE
-                                break
+        if (abs(diff(ids)) > limit){
+            linked = FALSE
+        } else {
+            if (abs(diff(ids))!=1) {
+                switch(method,
+                       nvg={
+                            for (i in seq(ids[1]+1, ids[2]-1)) {
+                                if (x[i] >= x[ids[2]] + ((x[ids[1]]-x[ids[2]])*(ids[2]-i)/(ids[2]-ids[1]))) {
+                                    linked = FALSE
+                                    break
+                                }
                             }
-                        }
-                    },
-                    hvg = {
-                        for (i in seq(ids[1]+1, ids[2]-1)) {
-                            if (x[i] >= x[ids[1]] || x[i] >= x[ids[2]]) {
-                                linked = FALSE
-                                break
+                        },
+                        hvg = {
+                            for (i in seq(ids[1]+1, ids[2]-1)) {
+                                if (x[i] >= x[ids[1]] || x[i] >= x[ids[2]]) {
+                                    linked = FALSE
+                                    break
+                                }
                             }
-                        }
-                    })
+                        })
+            }
         }
         linked
     }, mc.cores = num_cores))

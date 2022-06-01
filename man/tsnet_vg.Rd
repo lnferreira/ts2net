@@ -21,6 +21,5 @@ allowed in the visibility. This parameter limits the max visibility.}
 visibility graph
 }
 \description{
-TODO: limit distance
 TODO: weights
 }
