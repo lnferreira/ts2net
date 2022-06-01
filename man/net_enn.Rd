@@ -8,11 +8,9 @@ net_enn(
   D,
   eps,
   treat_NA_as = 1,
-  is_dist_symetric = T,
+  is_dist_symetric = TRUE,
   weighted = FALSE,
   invert_dist_as_weight = TRUE,
-  bipartite = FALSE,
-  bipartite_mode = "out",
   addColRowNames = TRUE
 )
 }
@@ -32,11 +30,6 @@ distance matrix}
 \item{invert_dist_as_weight}{Boolean, if weighted == TRUE, then the weights
 become 1 - distance. This is the default behavior since most network
 measures interpret higher weights as stronger connection.}
-
-\item{bipartite}{Boolean. If TRUE, an bipartite network is created. Default:
-FALSE. Check igraph::graph.incidence() for more details.}
-
-\item{bipartite_mode}{Bipartite network mode. Check: igraph::graph.incidence()}
 
 \item{addColRowNames}{Boolean. If TRUE (default), it uses the column and row
 names from dist matrix as node labels.}

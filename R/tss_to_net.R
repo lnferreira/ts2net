@@ -10,17 +10,13 @@
 #' @param invert_dist_as_weight Boolean, if weighted == TRUE, then the weights
 #'     become 1 - distance. This is the default behavior since most network
 #'     measures interpret higher weights as stronger connection.
-#' @param bipartite Boolean. If TRUE, an bipartite network is created. Default:
-#'     FALSE. Check igraph::graph.incidence() for more details.
-#' @param bipartite_mode Bipartite network mode. Check: igraph::graph.incidence()
 #' @param addColRowNames Boolean. If TRUE (default), it uses the column and row
 #'     names from dist matrix as node labels.
 #'
 #' @return a igraph network
 #' @export
-net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=T,
-                               weighted=FALSE, invert_dist_as_weight = TRUE,
-                               bipartite=FALSE, bipartite_mode = "out", addColRowNames=TRUE) {
+net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=TRUE,
+                               weighted=FALSE, invert_dist_as_weight = TRUE, addColRowNames=TRUE) {
     nas = is.na(D)
     if (length(which(nas)) > 0)
         D[nas] = treat_NA_as
@@ -44,14 +40,8 @@ net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=T,
     net_weighted = NULL
     if (weighted)
         net_weighted = TRUE
-    if (bipartite) {
-        net = graph.incidence(n, weighted = net_weighted, directed = !is_dist_symetric,
-                              mode = bipartite_mode)
-    } else {
-        net = graph.adjacency(n, mode=ifelse(is_dist_symetric, "undirected", "directed"),
-                              weighted = net_weighted, diag=F)
-    }
-    net
+    graph.adjacency(n, mode=ifelse(is_dist_symetric, "undirected", "directed"),
+                    weighted = net_weighted, diag=F)
 }
 
 #' Construct an approximated epsilon neighbor network (faster, but
