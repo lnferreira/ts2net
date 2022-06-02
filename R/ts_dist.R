@@ -46,6 +46,8 @@ ts_dist <- function(ts_list, dist_func=tsdist_cor, is_symetric=TRUE,
         })
     }, mc.cores = num_cores)
     dist_matrix = matrix(0, tsListLength, tsListLength)
+    if (!is.null(names(ts_list)))
+        colnames(dist_matrix) = rownames(dist_matrix) = names(ts_list)
     if (is_symetric){
         dist_matrix[lower.tri(dist_matrix)] = unlist(dists)
         dist_matrix = as.matrix(as.dist(dist_matrix))
