@@ -301,7 +301,6 @@ tsdist_file_parts_merge <- function(list_files, dir_path, num_elements, file_typ
 #' if positive_cor==F) correlation.
 #' @export
 tsdist_cor <- function(ts1, ts2, cor_type="abs", sig_test=FALSE, sig_level=0.01, ...) {
-    # r = cor(ts1, ts2, ...)
     r_test = cor.test(ts1, ts2, ...)
     r = as.numeric(r_test$estimate)
     d_cor = 1
