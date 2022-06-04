@@ -6,7 +6,7 @@
 
 ```ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can transformed into a networks and analyzed using network science and graph mining tools.
 
-*THIS IS A BETA VERSION - Please report bugs* [HERE](https://github.com/lnferreira/ts2net/issues)  
+***THIS IS A BETA VERSION - Please report bugs [HERE](https://github.com/lnferreira/ts2net/issues)*** 
 
 ## Installation
 
@@ -49,6 +49,31 @@ wnet = net_weighted(D)
 ![Fig1](inst/figs/fig01.jpg)
 **Fig. 1:** Transforming a time series data set into a network. (a) A toy data set composed by 10 sine and 10 cosine time series. A small white noise was added to each series. (b) Positive correlation distance calculated for the sin-cos data set. (c) The &epsilon;-NN network using &epsilon; = 0.5. (d) The _k_-NN network using _k_ = 2. (e) The weighted network with edges thickness proportional to the weight. Node colors represent the two classes (sine and cosines).
 
+Functions to calculate the distance matrix:
+
+- `ts_dist()`: Calculates all pairs of distances and returns a distance matrix. Runs in parallel.
+- `ts_dist_part()`: Calculates pairs of distances in part of data set. This function is useful to run in parallel as jobs.
+- `ts_dist_part_dir()`: Similar to `ts_dist_part()`, but read time series from files. It should be preferred when memory consumption is a concern, e.g., huge data set or very long time series.
+
+Distance functions available:
+
+- `tsdist_cor()`: Absolute, positive or negative correlation. Significance test available.
+- `tsdist_ccf()`: Absolute, positive, or negative cross-correlation.
+- `tsdist_dtw()`: Dynamic time warping (DTW).
+- `tsdist_nmi()`: Normalized mutual information.
+- `tsdist_voi()`: Variation of information.
+- `tsdist_mic()`: Maximal information coefficient (MIC).
+- `tsdist_es()`: Events synchronization. Significance test available.
+- `tsdist_vr()`: Van Rossum. Significance test available.
+
+Multiple time series into a network:
+
+- `net_knn()`: _k_-NN network
+- `net_knn_approx()`: _k_-NN network. Faster, but may omit some nearest neighbors.
+- `net_enn()`: &epsilon;-NN
+- `net_enn_approx()`: &epsilon;-NN. Faster, but may omit some nearest neighbors.
+- `net_weighted()`: Full weighted network
+
 ### A single time series as a network
 
 The second approach consists on transform a single time series into a network. The most straightforward method to perform this transformation consists on breaking the time series into time windows and use the same approach described for multiple time series. Other methods, such as visibility graphs or recurrence networks, can also be used. The following example show how to transform a single time series into a visibility graph:
@@ -61,23 +86,11 @@ net_vg = tsnet_vg(X)
 ![Fig2](inst/figs/fig06b.jpg)
 **Fig. 2:** Visibility graph construction. (a and c) The example time series _X_ with values represented by the bars and points. Gray lines connect ``visible'' values as defined in the (a) natural (red) and (c) horizontal (blue) visibility graphs. The resulting natural (b) and horizontal (d) visibility graphs.).
 
-For more details, please check the documentation. 
+One time series into a network:
 
-## Reference
-
-Please cite this paper if you used ```ts2net``` in a publication:
-
-```
-@article{ts2net,
-  title         = "From Time Series to Networks in R with ts2net",
-  author        = "Ferreira, Leonardo N",
-  month         =  May,
-  year          =  2022,
-  copyright     = "https://github.com/lnferreira/ts2net/blob/main/LICENSE",
-  archivePrefix = "arXiv"
-  eprint        = ""
-}
-```
+- `ts_to_windows()`: Extracts time windows that can be used to construct networks using the same approach used for multiple ones (Fig 1.).
+- `tsnet_vg()`: Natural and horizontal visibility graphs.
+- `tsnet_rn()`: recurrence networks.
 
 ## License
 

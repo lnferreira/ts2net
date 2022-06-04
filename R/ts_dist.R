@@ -100,9 +100,8 @@ ts_dist <- function(ts_list, dist_func=tsdist_cor, is_symetric=TRUE,
 #'     for the time series i and j.
 #' @importFrom compiler cmpfun
 #' @export
-tsdist_parts_parallel <- function(ts_list, num_part, num_total_parts, combinations, dist_func=tsdist_cor,
-                                isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE,
-                                num_cores=1, ...) {
+ts_dist_part <- function(ts_list, num_part, num_total_parts, combinations, dist_func=tsdist_cor,
+                         isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE, num_cores=1, ...) {
     measureFuncCompiled <- cmpfun(dist_func)
     tsListLength = length(ts_list)
     combs = c()
@@ -178,9 +177,8 @@ tsdist_parts_parallel <- function(ts_list, num_part, num_total_parts, combinatio
 #'
 #' @importFrom compiler cmpfun
 #' @export
-tsdist_dir_parallel <- function(input_dir, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
-                              isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE,
-                              num_cores=1, ...) {
+ts_dist_part_dir <- function(input_dir, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
+                       isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE, num_cores=1, ...) {
     measureFuncCompiled <- cmpfun(measureFunc)
     list_files = list.files(path = input_dir, full.names = T, pattern = "RDS")
     ts_list_length = length(list_files)
@@ -216,66 +214,6 @@ tsdist_dir_parallel <- function(input_dir, num_part, num_total_parts, combinatio
     if (simplify)
         dists = do.call(rbind, dists)
     dists
-}
-
-
-
-#' Merge parts of distances stored in data frames.
-#'
-#' The functions tsdist_dir_parallel and tsdist_parts_parallel calculate part of
-#' the distance matrix D. This function merges these files and construct
-#' a distance matrix D.
-#'
-#' @param list_dfs A list of data frames. Each data frame should have three
-#'   columns i,j, and dist.
-#' @param num_elements The number of time series in the data set. The number of elements
-#'   defines the number of rows ans columns in the distance matrix D.
-#'
-#' @return Distance matrix D
-#' @export
-tsdist_parts_merge <- function(list_dfs, num_elements) {
-    D = matrix(0, num_elements, num_elements)
-    for (df_d in list_dfs) {
-        D[as.matrix(df_d[,c("i", "j")])] = df_d$dist
-    }
-    D
-}
-
-
-#' Merge parts of distances stored in files.
-#'
-#' The functions tsdist_dir_parallel and tsdist_parts_parallel calculate part of
-#' the distance matrix D. The results of the multiple calls of these functions are
-#' normally stored in RDS or csv files. This function merges these files and construct
-#' a distance matrix D.
-#'
-#' @param list_files A list of files with distances.
-#' @param dir_path If list_files was not passed, than this function uses this parameter
-#'   to read the files in this directory.
-#' @param num_elements The number of time series in the data set. The number of elements
-#'   defines the number of rows ans columns in the distance matrix D.
-#' @param file_type The extension of the files where the distances are stored. It can be
-#'   "RDS" (default) or "csv". The RDS files should be data frames composed by three
-#'   columns i,j, and dist. This format is preferred because it is a compact file. The other
-#'   option is a "csv" also containing the i,j, and dist columns.
-#'
-#' @return Distance matrix D
-#' @export
-tsdist_file_parts_merge <- function(list_files, dir_path, num_elements, file_type="RDS") {
-    if (missing(list_files))
-        files = list.files(dir_path, pattern = file_type, include.dirs = F, full.names = T)
-    D = matrix(0, num_elements, num_elements)
-    for (file in files) {
-        if (file_type == "RDS") {
-            df_d = readRDS(file)
-        } else {
-            df_d = read.csv(file, row.names = F)
-        }
-        if (class(df_d) == "list")
-            df_d = do.call(rbind, df_d)
-        D[as.matrix(df_d[,c("i", "j")])] = df_d$dist
-    }
-    D
 }
 
 
