@@ -49,7 +49,7 @@ net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=TRUE,
 #' may be omitted.
 #'
 #' @param D Distance matrix
-#' @param eps (Integer) k nearest-nearest neighbors where each time seires
+#' @param eps (Integer) k nearest-nearest neighbors where each time series
 #' will be connected to
 #' @param ... Other parameters to frNN() function from dbscan package.
 #'
@@ -86,7 +86,7 @@ net_weighted <- function(D, invert_dist_as_weight=TRUE) {
 #' Construct a knn-network from a distance matrix.
 #'
 #' @param D Distance matrix
-#' @param k (Integer) k nearest-nearest neighbors where each time seires
+#' @param k (Integer) k nearest-nearest neighbors where each time series
 #' will be connected to
 #' @param num_cores (Integer) Number of cores to use.
 #'
@@ -112,7 +112,7 @@ net_knn <- function(D, k, num_cores=1) {
 #' a distance matrix.
 #'
 #' @param D Distance matrix
-#' @param k (Integer) k nearest-nearest neighbors where each time seires
+#' @param k (Integer) k nearest-nearest neighbors where each time series
 #' will be connected to
 #' @param ... Other parameters to kNN() function from dbscan package.
 #'

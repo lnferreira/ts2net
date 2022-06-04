@@ -11,7 +11,7 @@ net_enn_approx(D, eps, ...)
 \arguments{
 \item{D}{Distance matrix}
 
-\item{eps}{(Integer) k nearest-nearest neighbors where each time seires
+\item{eps}{(Integer) k nearest-nearest neighbors where each time series
 will be connected to}
 
 \item{...}{Other parameters to frNN() function from dbscan package.}

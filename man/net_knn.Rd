@@ -9,7 +9,7 @@ net_knn(D, k, num_cores = 1)
 \arguments{
 \item{D}{Distance matrix}
 
-\item{k}{(Integer) k nearest-nearest neighbors where each time seires
+\item{k}{(Integer) k nearest-nearest neighbors where each time series
 will be connected to}
 
 \item{num_cores}{(Integer) Number of cores to use.}

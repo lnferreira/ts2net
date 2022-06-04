@@ -22,7 +22,7 @@ ts_dist_part_file(
 \item{input_dir}{Directory path for the directory with time series files (RDS)}
 
 \item{num_part}{Numeric positive between 1 and the total number of parts
-(num_total_parts). This value corresponds to the part (chunck) of the
+(num_total_parts). This value corresponds to the part (chunk) of the
 total number of parts to be calculated.}
 
 \item{num_total_parts}{Numeric positive corresponding the total number of

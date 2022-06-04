@@ -92,7 +92,7 @@ dist_file_parts_merge <- function(list_files, dir_path, num_elements, file_type=
         } else {
             df_d = read.csv(file, row.names = F)
         }
-        if (class(df_d) == "list")
+        if (inherits(df_d, "list"))
             df_d = do.call(rbind, df_d)
         D[as.matrix(df_d[,c("i", "j")])] = df_d$dist
     }

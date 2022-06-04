@@ -10,7 +10,7 @@ net_knn_approx(D, k, ...)
 \arguments{
 \item{D}{Distance matrix}
 
-\item{k}{(Integer) k nearest-nearest neighbors where each time seires
+\item{k}{(Integer) k nearest-nearest neighbors where each time series
 will be connected to}
 
 \item{...}{Other parameters to kNN() function from dbscan package.}
