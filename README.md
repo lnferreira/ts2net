@@ -23,7 +23,7 @@ The `ts2net` package provides two modelling approaches: one or a set of time ser
 
 ### A set of time series as a network
 
-The first modeling approach consists on transforming a set of time series into a network. This transformation typically involves the distance calculation for every pair of time series, represented by the distance matrix _D_. Then, _D_ is transformed into a network using strategies such as _k_ nearest neighbors, &epsilon; neighborhood, or complete weighted graph. The following example shows how to calculate all pairs of distances (_D_) and construct a _k_ nearest neighbor network (knn) using a toy data set composed by five sines and five cosines series (with noise):
+The first modeling approach consists on transforming a set of time series into a network. This transformation typically involves the distance calculation for every pair of time series, represented by the distance matrix _D_. Then, _D_ is transformed into a network using strategies such as _k_ nearest neighbors, &epsilon; neighborhood, or complete weighted graph. The following example shows how to calculate all pairs of distances (_D_) and construct a _k_ nearest neighbor network (_k_-NN) using a toy data set composed by five sines and five cosines series (with noise):
 
 ``` r
 library(ts2net)
@@ -77,7 +77,7 @@ X = c(10, 5, 2.1, 4.1, 1, 7, 10)
 net_vg = tsnet_vg(X)
 ```
 
-![Fig2](inst/figs/fig06b.jpg)
+![Fig2](inst/figs/fig06.jpg)
 **Fig. 2:** Visibility graph construction. (a and c) The example time series _X_ with values represented by the bars and points. Gray lines connect ``visible'' values as defined in the (a) natural (red) and (c) horizontal (blue) visibility graphs. The resulting natural (b) and horizontal (d) visibility graphs.).
 
 One time series into a network:
