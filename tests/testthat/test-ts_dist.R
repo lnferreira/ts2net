@@ -22,7 +22,7 @@ test_that("Test distance parts from files", {
     for (i in 1:10)
         saveRDS(ts_list[[i]], ts_files_tss[[i]])
     for (i in 1:3) {
-        dist_part_from_file = ts_dist_part_dir(input_dir = temp_dir_tss, num_part = i, num_total_parts = 3)
+        dist_part_from_file = ts_dist_part_file(input_dir = temp_dir_tss, num_part = i, num_total_parts = 3)
         dist_part_no_file = ts_dist_part(ts_list, num_part = i, num_total_parts = 3)
         expect_true(all.equal(dist_part_from_file, dist_part_no_file))
         saveRDS(dist_part_from_file, ts_files_dists[i])

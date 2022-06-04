@@ -10,12 +10,6 @@
 
 ## Installation
 
-From CRAN:
-
-``` r
-install.packages("ts2net")
-```
-
 The development version can be installed from GitHub using the function `install_github()` from either `devtools` or `remotes` packages:
 
 ``` r
@@ -53,7 +47,7 @@ Functions to calculate the distance matrix:
 
 - `ts_dist()`: Calculates all pairs of distances and returns a distance matrix. Runs in parallel.
 - `ts_dist_part()`: Calculates pairs of distances in part of data set. This function is useful to run in parallel as jobs.
-- `ts_dist_part_dir()`: Similar to `ts_dist_part()`, but read time series from files. It should be preferred when memory consumption is a concern, e.g., huge data set or very long time series.
+- `ts_dist_part_file()`: Similar to `ts_dist_part()`, but read time series from files. It should be preferred when memory consumption is a concern, e.g., huge data set or very long time series.
 
 Distance functions available:
 

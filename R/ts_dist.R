@@ -177,7 +177,7 @@ ts_dist_part <- function(ts_list, num_part, num_total_parts, combinations, dist_
 #'
 #' @importFrom compiler cmpfun
 #' @export
-ts_dist_part_dir <- function(input_dir, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
+ts_dist_part_file <- function(input_dir, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
                        isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE, num_cores=1, ...) {
     measureFuncCompiled <- cmpfun(measureFunc)
     list_files = list.files(path = input_dir, full.names = T, pattern = "RDS")
