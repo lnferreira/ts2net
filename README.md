@@ -70,7 +70,7 @@ Multiple time series into a network:
 
 ### A single time series as a network
 
-The second approach consists on transform a single time series into a network. The most straightforward method to perform this transformation consists on breaking the time series into time windows and use the same approach described for multiple time series. Other methods, such as visibility graphs or recurrence networks, can also be used. The following example show how to transform a single time series into a visibility graph:
+The second approach consists on transform a single time series into a network. The most straightforward method to perform this transformation consists on breaking the time series into time windows and use the same approach described for multiple time series. Other methods, such as visibility graphs or recurrence networks, can also be used. The following example show how to transform a single time series _X_ into a visibility graph:
 
 ``` r
 X = c(10, 5, 2.1, 4.1, 1, 7, 10)
