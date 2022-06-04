@@ -4,7 +4,7 @@
 [![Codecov test coverage](https://codecov.io/gh/lnferreira/ts2net/branch/main/graph/badge.svg?token=KFSXU3IE7C)](https://codecov.io/gh/lnferreira/ts2net)
 [![License](https://img.shields.io/github/license/lnferreira/ts2net)](https://github.com/lnferreira/ts2net/blob/main/LICENSE)
 
-```Ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can transformed into a networks and analyzed using network science and graph mining tools.
+```ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can transformed into a networks and analyzed using network science and graph mining tools.
 
 *THIS IS A BETA VERSION - Please report bugs* [HERE](https://github.com/lnferreira/ts2net/issues)  
 
@@ -54,10 +54,14 @@ wnet = net_weighted(D)
 The second approach consists on transform a single time series into a network. The most straightforward method to perform this transformation consists on breaking the time series into time windows and use the same approach described for multiple time series. Other methods, such as visibility graphs or recurrence networks, can also be used. The following example show how to transform a single time series into a visibility graph:
 
 ``` r
-net_vg = tsnet_vg(ts_dataset[[1]])
+X = c(10, 5, 2.1, 4.1, 1, 7, 10)
+net_vg = tsnet_vg(X)
 ```
 
-For more details, please check the documentation. LINK
+![Fig2](inst/figs/fig06b.jpg)
+**Fig. 2:** Visibility graph construction. (a and c) The example time series _X_ with values represented by the bars and points. Gray lines connect ``visible'' values as defined in the (a) natural (red) and (c) horizontal (blue) visibility graphs. The resulting natural (b) and horizontal (d) visibility graphs.).
+
+For more details, please check the documentation. 
 
 ## Reference
 
