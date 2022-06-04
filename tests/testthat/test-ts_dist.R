@@ -1,8 +1,8 @@
 test_that("Test distance parts", {
     ts_list = dataset_sincos_generate(num_sin_series = 5, num_cos_series = 5, ts_length = 50)
-    part1 = tsdist_parts_parallel(ts_list, num_part = 1, num_total_parts = 3)
-    part2 = tsdist_parts_parallel(ts_list, num_part = 2, num_total_parts = 3)
-    part3 = tsdist_parts_parallel(ts_list, num_part = 3, num_total_parts = 3)
+    part1 = ts_dist_part(ts_list, num_part = 1, num_total_parts = 3)
+    part2 = ts_dist_part(ts_list, num_part = 2, num_total_parts = 3)
+    part3 = ts_dist_part(ts_list, num_part = 3, num_total_parts = 3)
     parts = list(part1, part2, part3)
     D1 = tsdist_parts_merge(parts, 10)
     D2 = ts_dist(ts_list)
@@ -22,8 +22,8 @@ test_that("Test distance parts from files", {
     for (i in 1:10)
         saveRDS(ts_list[[i]], ts_files_tss[[i]])
     for (i in 1:3) {
-        dist_part_from_file = tsdist_dir_parallel(input_dir = temp_dir_tss, num_part = i, num_total_parts = 3)
-        dist_part_no_file = tsdist_parts_parallel(ts_list, num_part = i, num_total_parts = 3)
+        dist_part_from_file = ts_dist_part_dir(input_dir = temp_dir_tss, num_part = i, num_total_parts = 3)
+        dist_part_no_file = ts_dist_part(ts_list, num_part = i, num_total_parts = 3)
         expect_true(all.equal(dist_part_from_file, dist_part_no_file))
         saveRDS(dist_part_from_file, ts_files_dists[i])
     }

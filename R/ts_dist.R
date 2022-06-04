@@ -100,9 +100,8 @@ ts_dist <- function(ts_list, dist_func=tsdist_cor, is_symetric=TRUE,
 #'     for the time series i and j.
 #' @importFrom compiler cmpfun
 #' @export
-tsdist_parts_parallel <- function(ts_list, num_part, num_total_parts, combinations, dist_func=tsdist_cor,
-                                isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE,
-                                num_cores=1, ...) {
+ts_dist_part <- function(ts_list, num_part, num_total_parts, combinations, dist_func=tsdist_cor,
+                         isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE, num_cores=1, ...) {
     measureFuncCompiled <- cmpfun(dist_func)
     tsListLength = length(ts_list)
     combs = c()
@@ -178,9 +177,8 @@ tsdist_parts_parallel <- function(ts_list, num_part, num_total_parts, combinatio
 #'
 #' @importFrom compiler cmpfun
 #' @export
-tsdist_dir_parallel <- function(input_dir, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
-                              isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE,
-                              num_cores=1, ...) {
+ts_dist_part_dir <- function(input_dir, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
+                       isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE, num_cores=1, ...) {
     measureFuncCompiled <- cmpfun(measureFunc)
     list_files = list.files(path = input_dir, full.names = T, pattern = "RDS")
     ts_list_length = length(list_files)
