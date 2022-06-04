@@ -20,10 +20,12 @@ export(tsdist_ccf)
 export(tsdist_cor)
 export(tsdist_dtw)
 export(tsdist_es)
-export(tsdist_file_parts_merge)
 export(tsdist_mic)
 export(tsdist_nmi)
+<<<<<<< HEAD
+=======
 export(tsdist_parts_merge)
+>>>>>>> 8c6164f0a97d1268fbae7c9644b69412ae1c57dd
 export(tsdist_voi)
 export(tsdist_vr)
 export(tsnet_rn)
