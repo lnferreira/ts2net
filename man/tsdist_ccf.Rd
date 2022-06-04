@@ -22,7 +22,7 @@ tsdist_ccf(
 \item{type}{String. "correlation" or "covariance" to be used (type) in the ccf function.}
 
 \item{cor_type}{String. "abs" (default), "+", or "-". "abs" considers the
-correlation absolute value. "+" only positve correlations and "-" only
+correlation absolute value. "+" only positive correlations and "-" only
 negative correlations.}
 
 \item{directed}{Boolean. If FALSE (default), the lag interval [-lag_max,+lag_max] is
@@ -36,5 +36,5 @@ considered. Otherwise, [-lag_max,0] is considered.}
 Distance
 }
 \description{
-Minimum correlation distance considering a +- lag máxium (lag_max)
+Minimum correlation distance considering a +- max lag  (lag_max)
 }

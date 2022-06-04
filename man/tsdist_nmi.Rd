@@ -8,8 +8,8 @@ tsdist_nmi(
   ts1,
   ts2,
   nbins = c("sturges", "freedman-diaconis", "scott"),
-  normalization_method = c("sum", "min", "max", "sqrt"),
-  mi_method = "emp"
+  normalization = c("sum", "min", "max", "sqrt"),
+  method = "emp"
 )
 }
 \arguments{
@@ -21,11 +21,11 @@ tsdist_nmi(
 It can be a positive integer or a string with one of the three rules
 "sturges" (default), "freedman-diaconis", or "scott".}
 
-\item{normalization_method}{The mutual information (I) normalization method.
+\item{normalization}{The mutual information (I) normalization method.
 Options are "sum" (default) 1-(2I/(h1+h2)), "min" 1-(I/min(h1,h2)), "max"
 1-(I/max(h1,h2)), and "sqrt" 1-(I/sqrt(h1*h2)).}
 
-\item{mi_method}{The name of the entropy estimator used in the functions
+\item{method}{The name of the entropy estimator used in the functions
 mutinformation() and entropy() from the infotheo package.}
 }
 \value{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ts_dist.R
 \name{tsdist_vr}
 \alias{tsdist_vr}
-\title{van Rossum distance with significance test}
+\title{van Rossum distance}
 \usage{
 tsdist_vr(ets1, ets2, tau = 1, sig_test = FALSE, reps = 100, sig_level = 0.01)
 }

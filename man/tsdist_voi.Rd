@@ -8,7 +8,7 @@ tsdist_voi(
   ts1,
   ts2,
   nbins = c("sturges", "freedman-diaconis", "scott"),
-  mi_method = "emp"
+  method = "emp"
 )
 }
 \arguments{
@@ -20,7 +20,7 @@ tsdist_voi(
 It can be a positive integer or a string with one of the three rules
 "sturges" (default), "freedman-diaconis", or "scott".}
 
-\item{mi_method}{The name of the entropy estimator used in the functions
+\item{method}{The name of the entropy estimator used in the functions
 mutinformation() and entropy() from the infotheo package.}
 }
 \value{

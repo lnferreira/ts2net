@@ -21,8 +21,8 @@ tsdist_es(
 
 \item{tau_max}{The maximum tau allowed ()}
 
-\item{method}{"quiroga" (default) for the default co-occurance count and
-normalization or "boers" for the co-occurance count with tau_max and no
+\item{method}{"quiroga" (default) for the default co-occurrence count and
+normalization or "boers" for the co-occurrence count with tau_max and no
 normalization.}
 
 \item{sig_test}{Run a significance test. Return 0 if significant or 1 otherwise.}

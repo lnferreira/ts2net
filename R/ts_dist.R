@@ -326,13 +326,13 @@ tsdist_cor <- function(ts1, ts2, cor_type="abs", sig_test=FALSE, sig_level=0.01,
 
 #' Cross-correlation distance
 #'
-#' Minimum correlation distance considering a +- lag máxium (lag_max)
+#' Minimum correlation distance considering a +- max lag  (lag_max)
 #'
 #' @param ts1 Array. Time series 1
 #' @param ts2 Array. Time series 2
 #' @param type String. "correlation" or "covariance" to be used (type) in the ccf function.
 #' @param cor_type String. "abs" (default), "+", or "-". "abs" considers the
-#'   correlation absolute value. "+" only positve correlations and "-" only
+#'   correlation absolute value. "+" only positive correlations and "-" only
 #'   negative correlations.
 #' @param directed Boolean. If FALSE (default), the lag interval [-lag_max,+lag_max] is
 #'   considered. Otherwise, [-lag_max,0] is considered.
@@ -377,29 +377,31 @@ tsdist_ccf <- function(ts1, ts2, type=c("correlation", "covariance"),
 #' @param nbins The number of bins used for the discretization of both time series.
 #'   It can be a positive integer or a string with one of the three rules
 #'   "sturges" (default), "freedman-diaconis", or "scott".
-#' @param mi_method The name of the entropy estimator used in the functions
+#' @param method The name of the entropy estimator used in the functions
 #'   mutinformation() and entropy() from the infotheo package.
 #'
 #' @return Distance
 #' @export
 #' @importFrom infotheo discretize mutinformation entropy
 tsdist_voi <- function(ts1, ts2, nbins = c("sturges", "freedman-diaconis", "scott"),
-                       mi_method="emp") {
+                       method="emp") {
     ts_bin = ts1
     if (length(ts2) > length(ts1))
         ts_bin = ts2
-    if (nbins[1] == "sturges") {
+    if (is.character(nbins))
+        nbins = match.arg(nbins)
+    if (nbins == "sturges") {
         nbins = nclass.Sturges(ts_bin)
-    } else if (nbins[1] == "freedman-diaconis") {
+    } else if (nbins == "freedman-diaconis") {
         nbins = nclass.FD(ts_bin)
-    } else if (nbins[1] == "scott") {
+    } else if (nbins == "scott") {
         nbins = nclass.scott(ts_bin)
     }
     ts1b = discretize(ts1, nbins = nbins)
     ts2b = discretize(ts2, nbins = nbins)
-    i = mutinformation(ts1b, ts2b, method = mi_method)
-    h1 = entropy(ts1b, method = mi_method)
-    h2 = entropy(ts2b, method = mi_method)
+    i = mutinformation(ts1b, ts2b, method = method)
+    h1 = entropy(ts1b, method = method)
+    h2 = entropy(ts2b, method = method)
     h1 + h2 - 2 * i
 }
 
@@ -414,10 +416,10 @@ tsdist_voi <- function(ts1, ts2, nbins = c("sturges", "freedman-diaconis", "scot
 #' @param nbins The number of bins used for the discretization of both time series.
 #'   It can be a positive integer or a string with one of the three rules
 #'   "sturges" (default), "freedman-diaconis", or "scott".
-#' @param normalization_method The mutual information (I) normalization method.
+#' @param normalization The mutual information (I) normalization method.
 #'   Options are "sum" (default) 1-(2I/(h1+h2)), "min" 1-(I/min(h1,h2)), "max"
 #'   1-(I/max(h1,h2)), and "sqrt" 1-(I/sqrt(h1*h2)).
-#' @param mi_method The name of the entropy estimator used in the functions
+#' @param method The name of the entropy estimator used in the functions
 #'   mutinformation() and entropy() from the infotheo package.
 #'
 #' @importFrom infotheo discretize mutinformation entropy
@@ -425,25 +427,27 @@ tsdist_voi <- function(ts1, ts2, nbins = c("sturges", "freedman-diaconis", "scot
 #' @return Distance
 #' @export
 tsdist_nmi <- function(ts1, ts2, nbins = c("sturges", "freedman-diaconis", "scott"),
-                       normalization_method = c("sum", "min", "max", "sqrt"),
-                       mi_method="emp") {
+                       normalization = c("sum", "min", "max", "sqrt"),
+                       method = "emp") {
     ts_bin = ts1
     if (length(ts2) > length(ts1))
         ts_bin = ts2
-    if (nbins[1] == "sturges") {
+    if (is.character(nbins))
+        nbins = match.arg(nbins)
+    if (nbins == "sturges") {
         nbins = nclass.Sturges(ts_bin)
-    } else if (nbins[1] == "freedman-diaconis") {
+    } else if (nbins == "freedman-diaconis") {
         nbins = nclass.FD(ts_bin)
-    } else if (nbins[1] == "scott") {
+    } else if (nbins == "scott") {
         nbins = nclass.scott(ts_bin)
     }
     ts1b = discretize(ts1, nbins = nbins)
     ts2b = discretize(ts2, nbins = nbins)
-    i = mutinformation(ts1b, ts2b, method = mi_method)
-    h1 = entropy(ts1b, method = mi_method)
-    h2 = entropy(ts2b, method = mi_method)
-    normalization_method = match.arg(normalization_method)
-    normalization <- switch(normalization_method,
+    i = mutinformation(ts1b, ts2b, method = method)
+    h1 = entropy(ts1b, method = method)
+    h2 = entropy(ts2b, method = method)
+    normalization = match.arg(normalization)
+    normalization <- switch(normalization,
                 sum = 0.5 * (h1 + h2),
                 min = min(h1, h2),
                 max = max(h1, h2),
@@ -481,7 +485,7 @@ tsdist_mic <- function(ts1, ts2) {
 #' @importFrom dtw dtw
 #' @export
 tsdist_dtw <- function(ts1, ts2, ...) {
-    dtw(ts1,ts2, ...)$distance
+    dtw(ts1, ts2, distance.only=TRUE, ...)$distance
 }
 
 
@@ -501,8 +505,8 @@ tsdist_dtw <- function(ts1, ts2, ...) {
 #' @param tau_max The maximum tau allowed ()
 #' @param sig_test Run a significance test. Return 0 if significant or 1 otherwise.
 #' @param reps Number of repetitions to construct the confidence interval
-#' @param method "quiroga" (default) for the default co-occurance count and
-#'   normalization or "boers" for the co-occurance count with tau_max and no
+#' @param method "quiroga" (default) for the default co-occurrence count and
+#'   normalization or "boers" for the co-occurrence count with tau_max and no
 #'   normalization.
 #'
 #' @return distance
@@ -618,7 +622,7 @@ tssim_event_sync <- function(tts1, tts2, tau_max = 1, normalization=c("both", "m
 }
 
 
-#' van Rossum distance with significance test
+#' van Rossum distance
 #'
 #' This function compares the times which the events occur e.g., time indices
 #' where the time series values are different than zero. Note that the intensity
@@ -654,6 +658,8 @@ tsdist_vr <- function(ets1, ets2, tau = 1, sig_test=FALSE,
         threshold = quantile(sampling_results, sig_level)
     }
     d = fmetric(tts1, tts2, measure = "dist", tau = tau)
+    if (is.na(d))
+        d = 1
     if (sig_test) {
         if (is.na(d)) {
             d = 1
