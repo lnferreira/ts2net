@@ -77,12 +77,7 @@ X = c(10, 5, 2.1, 4.1, 1, 7, 10)
 net_vg = tsnet_vg(X)
 ```
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="inst/figs/fig06_black.jpg">
-  <source media="(prefers-color-scheme: light)" srcset="inst/figs/fig06.jpg">
-  <img alt="Visibility graphs" src="inst/figs/fig06.jpg">
-</picture>
-
+![Visibility graphs](inst/figs/fig06._blackjpg#gh-dark-mode-only)![Visibility graphs](inst/figs/fig06.jpg#gh-light-mode-only)
 **Fig. 2:** Visibility graph construction. (a and c) The example time series _X_ with values represented by the bars and points. Gray lines connect ``visible'' values as defined in the (a) natural (red) and (c) horizontal (blue) visibility graphs. The resulting natural (b) and horizontal (d) visibility graphs.).
 
 One time series into a network:
