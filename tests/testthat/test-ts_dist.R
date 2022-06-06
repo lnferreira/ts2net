@@ -127,7 +127,7 @@ test_that("Event synchronization distance", {
     ets_sin = events_from_ts(ts_sin, 3, "highest")
     ets_cos = events_from_ts(ts_cos, 3, "highest")
     expect_equal(round(tsdist_es(ets_sin, ets_sin), 10), 0)
-    expect_gt(tsdist_es(ets_sin, ets_cos), 0.1)
+    expect_gt(tsdist_es(ets_sin, ets_cos, tau_max = 1), 0.1)
     expect_equal(tsdist_es(ets_sin, ets_sin, sig_test = T, reps=10), 0)
     expect_equal(tsdist_es(ets_sin, ets_cos, tau=0, method = "boers", sig_test=T), 1)
 })
