@@ -40,7 +40,7 @@ knnet = net_knn(D, k = 2)
 wnet = net_weighted(D)
 ```
 
-![Fig1](inst/figs/fig01.jpg)
+![Time series to network](inst/figs/fig01_black.jpg#gh-dark-mode-only)![Time series to network](inst/figs/fig01.jpg#gh-light-mode-only)
 **Fig. 1:** Transforming a time series data set into a network. (a) A toy data set composed by 10 sine and 10 cosine time series. A small white noise was added to each series. (b) Positive correlation distance calculated for the sin-cos data set. (c) The &epsilon;-NN network using &epsilon; = 0.5. (d) The _k_-NN network using _k_ = 2. (e) The weighted network with edges thickness proportional to the weight. Node colors represent the two classes (sine and cosines).
 
 Functions to calculate the distance matrix:
@@ -77,12 +77,7 @@ X = c(10, 5, 2.1, 4.1, 1, 7, 10)
 net_vg = tsnet_vg(X)
 ```
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="inst/figs/fig06_black.jpg">
-  <source media="(prefers-color-scheme: light)" srcset="inst/figs/fig06.jpg">
-  <img alt="Visibility graphs" src="inst/figs/fig06.jpg">
-</picture>
-
+![Visibility graphs](inst/figs/fig06_black.jpg#gh-dark-mode-only)![Visibility graphs](inst/figs/fig06.jpg#gh-light-mode-only)
 **Fig. 2:** Visibility graph construction. (a and c) The example time series _X_ with values represented by the bars and points. Gray lines connect ``visible'' values as defined in the (a) natural (red) and (c) horizontal (blue) visibility graphs. The resulting natural (b) and horizontal (d) visibility graphs.).
 
 One time series into a network:
