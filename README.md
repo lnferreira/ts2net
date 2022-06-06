@@ -2,7 +2,7 @@
 
 [![R-CMD-check](https://github.com/lnferreira/ts2net/workflows/R-CMD-check/badge.svg)](https://github.com/lnferreira/ts2net/actions)
 [![Codecov test coverage](https://codecov.io/gh/lnferreira/ts2net/branch/main/graph/badge.svg?token=KFSXU3IE7C)](https://codecov.io/gh/lnferreira/ts2net)
-[![License](https://img.shields.io/github/license/lnferreira/ts2net)](https://github.com/lnferreira/ts2net/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 ```ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can transformed into a networks and analyzed using network science and graph mining tools.
 
@@ -77,7 +77,12 @@ X = c(10, 5, 2.1, 4.1, 1, 7, 10)
 net_vg = tsnet_vg(X)
 ```
 
-![Fig2](inst/figs/fig06.jpg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="inst/figs/fig06_black.jpg">
+  <source media="(prefers-color-scheme: light)" srcset="inst/figs/fig06.jpg">
+  <img alt="Visibility graphs" src="inst/figs/fig06.jpg">
+</picture>
+
 **Fig. 2:** Visibility graph construction. (a and c) The example time series _X_ with values represented by the bars and points. Gray lines connect ``visible'' values as defined in the (a) natural (red) and (c) horizontal (blue) visibility graphs. The resulting natural (b) and horizontal (d) visibility graphs.).
 
 One time series into a network:
