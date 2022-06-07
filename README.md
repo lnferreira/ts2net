@@ -1,7 +1,7 @@
 # ts2net <img src="man/figures/logo.png" align="right" height="139" />
 
 [![R-CMD-check](https://github.com/lnferreira/ts2net/workflows/R-CMD-check/badge.svg)](https://github.com/lnferreira/ts2net/actions)
-[![Codecov test coverage](https://codecov.io/gh/lnferreira/ts2net/branch/main/graph/badge.svg?token=KFSXU3IE7C)](https://codecov.io/gh/lnferreira/ts2net)
+[![Codecov test coverage](https://codecov.io/gh/lnferreira/ts2net/branch/main/graph/badge.svg?token=KFSXU3IE7C)](https://app.codecov.io/gh/lnferreira/ts2net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 ```ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can transformed into a networks and analyzed using network science and graph mining tools.
@@ -88,7 +88,7 @@ One time series into a network:
 
 ## License
 
-```ts2net``` is distributed under the [MIT license](LICENSE.md).
+```ts2net``` is distributed under the [MIT license](https://github.com/lnferreira/ts2net/blob/main/LICENSE.md).
 
 ## Bugs
 
