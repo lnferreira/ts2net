@@ -15,8 +15,8 @@ test_that("Test distance parts from files", {
     temp_dir = tempdir()
     temp_dir_tss = file.path(temp_dir, 'tss')
     temp_dir_dists = file.path(temp_dir, 'dists')
-    dir.create(temp_dir_tss, showWarnings = F)
-    dir.create(temp_dir_dists, showWarnings = F)
+    dir.create(temp_dir_tss, showWarnings = FALSE)
+    dir.create(temp_dir_dists, showWarnings = FALSE)
     ts_files_tss = sprintf("%s/%02d.RDS", temp_dir_tss, 1:10)
     ts_files_dists = sprintf("%s/%02d.RDS", temp_dir_dists, 1:3)
     for (i in 1:10)
@@ -30,7 +30,7 @@ test_that("Test distance parts from files", {
     D1 = dist_file_parts_merge(dir_path = temp_dir_dists, num_elements = 10)
     D2 = ts_dist(ts_list)
     expect_true(all(D1 == D2))
-    unlink(temp_dir, recursive = T)
+    unlink(temp_dir, recursive = TRUE)
 })
 
 
@@ -45,8 +45,8 @@ test_that("Correlation distances", {
     expect_equal(round(tsdist_cor(ts_sin1, -ts_sin1, cor_type = "abs"), 10), 0)
     expect_equal(round(tsdist_cor(ts_sin1, -ts_sin1, cor_type = "+"), 10), 1)
     expect_equal(round(tsdist_cor(ts_sin1, -ts_sin1, cor_type = "-"), 10), 0)
-    expect_equal(tsdist_cor(ts_sin1, ts_sin2, cor_type = "+", sig_test = T), 0)
-    expect_equal(tsdist_cor(ts_sin1, ts_sin2, cor_type = "+", sig_test = T, sig_level=1), 0)
+    expect_equal(tsdist_cor(ts_sin1, ts_sin2, cor_type = "+", sig_test = TRUE), 0)
+    expect_equal(tsdist_cor(ts_sin1, ts_sin2, cor_type = "+", sig_test = TRUE, sig_level=1), 0)
 })
 
 
@@ -128,8 +128,8 @@ test_that("Event synchronization distance", {
     ets_cos = events_from_ts(ts_cos, 3, "highest")
     expect_equal(round(tsdist_es(ets_sin, ets_sin), 10), 0)
     expect_gt(tsdist_es(ets_sin, ets_cos, tau_max = 1), 0.1)
-    expect_equal(tsdist_es(ets_sin, ets_sin, sig_test = T, reps=10), 0)
-    expect_equal(tsdist_es(ets_sin, ets_cos, tau=0, method = "boers", sig_test=T), 1)
+    expect_equal(tsdist_es(ets_sin, ets_sin, sig_test = TRUE, reps=10), 0)
+    expect_equal(tsdist_es(ets_sin, ets_cos, tau=0, method = "boers", sig_test=TRUE), 1)
 })
 
 
@@ -143,6 +143,6 @@ test_that("van Rossum distance", {
     expect_equal(round(tsdist_vr(ets_sin, ets_sin), 10), 0)
     expect_gt(tsdist_vr(ets_sin, ets_cos), 0.1)
     expect_equal(tsdist_vr(ets_sin, ets_cos, tau=0), 1)
-    expect_equal(tsdist_vr(ets_sin, ets_cos, sig_test = T, reps = 30), 1)
-    expect_equal(tsdist_vr(ets_sin, ets_sin, sig_test = T, reps = 40), 0)
+    expect_equal(tsdist_vr(ets_sin, ets_cos, sig_test = TRUE, reps = 30), 1)
+    expect_equal(tsdist_vr(ets_sin, ets_sin, sig_test = TRUE, reps = 40), 0)
 })

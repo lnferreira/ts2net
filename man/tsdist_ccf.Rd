@@ -9,9 +9,9 @@ tsdist_ccf(
   ts2,
   type = c("correlation", "covariance"),
   cor_type = "abs",
-  directed = F,
+  directed = FALSE,
   lag_max = 10,
-  return_lag = F
+  return_lag = FALSE
 )
 }
 \arguments{

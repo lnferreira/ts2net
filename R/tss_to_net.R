@@ -10,13 +10,13 @@
 #' @param invert_dist_as_weight Boolean, if weighted == TRUE, then the weights
 #'     become 1 - distance. This is the default behavior since most network
 #'     measures interpret higher weights as stronger connection.
-#' @param addColRowNames Boolean. If TRUE (default), it uses the column and row
+#' @param add_col_rownames Boolean. If TRUE (default), it uses the column and row
 #'     names from dist matrix as node labels.
 #'
 #' @return a igraph network
 #' @export
 net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=TRUE,
-                               weighted=FALSE, invert_dist_as_weight = TRUE, addColRowNames=TRUE) {
+                               weighted=FALSE, invert_dist_as_weight = TRUE, add_col_rownames=TRUE) {
     nas = is.na(D)
     if (length(which(nas)) > 0)
         D[nas] = treat_NA_as
@@ -33,7 +33,7 @@ net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=TRUE,
     } else {
         n[D <= eps] = 1
     }
-    if (addColRowNames){
+    if (add_col_rownames){
         colnames(n) = colnames(D)
         rownames(n) = rownames(D)
     }
@@ -41,7 +41,7 @@ net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=TRUE,
     if (weighted)
         net_weighted = TRUE
     graph.adjacency(n, mode=ifelse(is_dist_symetric, "undirected", "directed"),
-                    weighted = net_weighted, diag=F)
+                    weighted = net_weighted, diag=FALSE)
 }
 
 #' Construct an approximated epsilon neighbor network (faster, but
@@ -59,7 +59,7 @@ net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=TRUE,
 net_enn_approx <- function(D, eps, ...) {
     link_list = frNN(as.dist(D), eps = eps, ...)$id
     names(link_list) = 1:length(link_list)
-    net = graph_from_adj_list(link_list, mode="all", duplicate = F)
+    net = graph_from_adj_list(link_list, mode="all", duplicate = FALSE)
     V(net)$name = colnames(D)
     simplify(net)
 }
@@ -124,7 +124,7 @@ net_knn_approx <- function(D, k, ...) {
     link_list = kNN(as.dist(D), k = k, ...)$id
     link_list = lapply(1:nrow(link_list), function(i) unname(link_list[i,]))
     names(link_list) = 1:length(link_list)
-    net = graph_from_adj_list(link_list, mode="all", duplicate = F)
+    net = graph_from_adj_list(link_list, mode="all", duplicate = FALSE)
     V(net)$name = colnames(D)
     simplify(net)
 }

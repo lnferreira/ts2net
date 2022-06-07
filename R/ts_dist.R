@@ -180,7 +180,7 @@ ts_dist_part <- function(ts_list, num_part, num_total_parts, combinations, dist_
 ts_dist_part_file <- function(input_dir, num_part, num_total_parts, combinations, measureFunc=tsdist_cor,
                        isSymetric=TRUE, error_value=NaN, warn_error=TRUE, simplify=TRUE, num_cores=1, ...) {
     measureFuncCompiled <- cmpfun(measureFunc)
-    list_files = list.files(path = input_dir, full.names = T, pattern = "RDS")
+    list_files = list.files(path = input_dir, full.names = TRUE, pattern = "RDS")
     ts_list_length = length(list_files)
     combs = c()
     if (missing(combinations)) {
@@ -235,8 +235,8 @@ ts_dist_part_file <- function(input_dir, num_part, num_total_parts, combinations
 #'
 #' @importFrom stats cor.test
 #' @return Real value [0,1] where 0 means perfect positive (or negative
-#' if positive_cor==F) correlation and 1 no positive (or negative
-#' if positive_cor==F) correlation.
+#' if positive_cor==FALSE) correlation and 1 no positive (or negative
+#' if positive_cor==FALSE) correlation.
 #' @export
 tsdist_cor <- function(ts1, ts2, cor_type="abs", sig_test=FALSE, sig_level=0.01, ...) {
     r_test = cor.test(ts1, ts2, ...)
@@ -282,8 +282,8 @@ tsdist_cor <- function(ts1, ts2, cor_type="abs", sig_test=FALSE, sig_level=0.01,
 #' @export
 tsdist_ccf <- function(ts1, ts2, type=c("correlation", "covariance"),
                                     cor_type="abs",
-                                    directed=F, lag_max = 10, return_lag=F) {
-    cc = ccf(ts1, ts2, lag.max = lag_max, plot = F, type = type[1])
+                                    directed=FALSE, lag_max = 10, return_lag=FALSE) {
+    cc = ccf(ts1, ts2, lag.max = lag_max, plot = FALSE, type = type[1])
     cc_acfs = cc$acf[,,1]
     cc_lags = cc$lag[,,1]
     if (directed) {

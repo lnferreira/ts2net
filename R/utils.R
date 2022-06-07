@@ -84,13 +84,13 @@ dist_parts_merge <- function(list_dfs, num_elements) {
 #' @export
 dist_file_parts_merge <- function(list_files, dir_path, num_elements, file_type="RDS") {
     if (missing(list_files))
-        files = list.files(dir_path, pattern = file_type, include.dirs = F, full.names = T)
+        files = list.files(dir_path, pattern = file_type, include.dirs = FALSE, full.names = TRUE)
     D = matrix(0, num_elements, num_elements)
     for (file in files) {
         if (file_type == "RDS") {
             df_d = readRDS(file)
         } else {
-            df_d = read.csv(file, row.names = F)
+            df_d = read.csv(file, row.names = FALSE)
         }
         if (inherits(df_d, "list"))
             df_d = do.call(rbind, df_d)
@@ -152,7 +152,7 @@ events_from_ts <- function(ts, th, method=c("greater_than", "lower_than",
                ets[ts >= quantile(ts, probs = th)] = 1
            },
            highest = {
-               ets[order(ts, decreasing = T)[1:th]] = 1
+               ets[order(ts, decreasing = TRUE)[1:th]] = 1
            },
            lowest = {
                ets[order(ts)[1:th]] = 1

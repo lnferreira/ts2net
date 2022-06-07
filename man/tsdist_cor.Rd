@@ -23,8 +23,8 @@ negative correlations.}
 }
 \value{
 Real value [0,1] where 0 means perfect positive (or negative
-if positive_cor==F) correlation and 1 no positive (or negative
-if positive_cor==F) correlation.
+if positive_cor==FALSE) correlation and 1 no positive (or negative
+if positive_cor==FALSE) correlation.
 }
 \description{
 Considering r the person correlation coefficient, this function returns

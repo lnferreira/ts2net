@@ -88,7 +88,7 @@ One time series into a network:
 
 ## License
 
-```ts2net``` is distributed under the [MIT license](LICENSE).
+```ts2net``` is distributed under the [MIT license](LICENSE.md).
 
 ## Bugs
 

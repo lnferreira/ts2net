@@ -11,7 +11,7 @@ net_enn(
   is_dist_symetric = TRUE,
   weighted = FALSE,
   invert_dist_as_weight = TRUE,
-  addColRowNames = TRUE
+  add_col_rownames = TRUE
 )
 }
 \arguments{
@@ -31,7 +31,7 @@ distance matrix}
 become 1 - distance. This is the default behavior since most network
 measures interpret higher weights as stronger connection.}
 
-\item{addColRowNames}{Boolean. If TRUE (default), it uses the column and row
+\item{add_col_rownames}{Boolean. If TRUE (default), it uses the column and row
 names from dist matrix as node labels.}
 }
 \value{

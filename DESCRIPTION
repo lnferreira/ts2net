@@ -2,8 +2,13 @@ Package: ts2net
 Title: From Time Series to Networks 
 Version: 0.1.0
 Authors@R: 
-    person(given = "Leonardo", family = "N. Ferreira", email = "ferreira@leonardonascimento.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1445-0590"))
-Description: Transforming time series into networks.
+    person(given = "Leonardo", family = "N. Ferreira", email = "ferreira@leonardonascimento.com", 
+    role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1445-0590"))
+Description: Transforming one or multiple time series into networks. This package is 
+    useful for complex systems modeling, time series data mining, or time series analysis using networks. 
+    An introduction and the descriptions of the methods implemented in this package can be 
+    found in Mitchell (2006) <doi:10.1016/j.artint.2006.10.002>, 
+    Silva and Zhao (2016) <doi:10.1007/978-3-319-17290-3>, and Silva et al. (2021) <doi:10.1002/widm.1404>.
 License: MIT + file LICENSE
 URL: https://github.com/lnferreira/ts2net
 BugReports: https://github.com/lnferreira/ts2net/issues
