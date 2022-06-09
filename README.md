@@ -10,6 +10,12 @@
 
 ## Installation
 
+From CRAN:
+
+``` r
+install.packages("ts2net")
+```
+
 The development version can be installed from GitHub using the function `install_github()` from either `devtools` or `remotes` packages:
 
 ``` r
