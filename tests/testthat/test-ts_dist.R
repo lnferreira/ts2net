@@ -27,7 +27,7 @@ test_that("Test distance parts from files", {
         expect_true(all.equal(dist_part_from_file, dist_part_no_file))
         saveRDS(dist_part_from_file, ts_files_dists[i])
     }
-    D1 = dist_file_parts_merge(dir_path = temp_dir_dists, num_elements = 10)
+    D1 = dist_parts_file_merge(dir_path = temp_dir_dists, num_elements = 10)
     D2 = ts_dist(ts_list)
     expect_true(all(D1 == D2))
     unlink(temp_dir, recursive = TRUE)

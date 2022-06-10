@@ -82,7 +82,7 @@ dist_parts_merge <- function(list_dfs, num_elements) {
 #'
 #' @return Distance matrix D
 #' @export
-dist_file_parts_merge <- function(list_files, dir_path, num_elements, file_type="RDS") {
+dist_parts_file_merge <- function(list_files, dir_path, num_elements, file_type="RDS") {
     if (missing(list_files))
         files = list.files(dir_path, pattern = file_type, include.dirs = FALSE, full.names = TRUE)
     D = matrix(0, num_elements, num_elements)
