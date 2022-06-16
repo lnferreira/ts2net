@@ -4,11 +4,8 @@
 #' was adapted from the original and considers only cities in the US. Data was grouped by
 #' month (mean value) and removed days with missing data.
 #'
-#' @format A data frame with 61 rows and 28 variables:
-#' \describe{
-#'   \item{date}{First day of each month. The temperatures correspond to the mean values of each month }
-#'   \item{other columns}{Temperature (ºC) time series in each city}
-#' }
+#' @format A data frame with 61 rows and 28 variables. Each collumn (except date),
+#'   correspond to the mean temperature values (ºC) for each city.
 #' @docType data
 #' @keywords dataset
 #' @author David Beniaguev

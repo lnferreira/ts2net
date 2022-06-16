@@ -5,11 +5,8 @@
 \alias{us_cities_temperature_df}
 \title{Monthly temperatures in 27 US cities.}
 \format{
-A data frame with 61 rows and 28 variables:
-\describe{
-  \item{date}{First day of each month. The temperatures correspond to the mean values of each month }
-  \item{other columns}{Temperature (ºC) time series in each city}
-}
+A data frame with 61 rows and 28 variables. Each collumn (except date),
+  correspond to the mean temperature values (ºC) for each city.
 }
 \source{
 \url{https://www.kaggle.com/datasets/selfishgene/historical-hourly-weather-data}
