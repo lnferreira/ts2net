@@ -1,3 +1,36 @@
+#' Monthly temperatures in 27 US cities.
+#'
+#' A data set containing the temperature in 27 US cities from 2012 and 2017. This data set
+#' was adapted from the original and considers only cities in the US. Data was grouped by
+#' month (mean value) and removed days with missing data.
+#'
+#' @format A data frame with 61 rows and 28 variables:
+#' \describe{
+#'   \item{date}{First day of each month. The temperatures correspond to the mean values of each month }
+#'   \item{other columns}{Temperature (ºC) time series in each city}
+#' }
+#' @docType data
+#' @keywords dataset
+#' @author David Beniaguev
+#' @note This data set is released under the Database Contents License (DbCL) v1.0.
+#' @source \url{https://www.kaggle.com/datasets/selfishgene/historical-hourly-weather-data}
+"us_cities_temperature_df"
+
+#' Monthly temperatures in 27 US cities.
+#'
+#' A data set containing the temperature in 27 US cities from 2012 and 2017. This data set
+#' was adapted from the original and considers only cities in the US. Data was grouped by
+#' month (mean value) and removed days with missing data.
+#'
+#' @format A list with a time series for each city. For the dates, check us_cities_temperature_df
+#'   data set.
+#' @docType data
+#' @keywords dataset
+#' @author David Beniaguev
+#' @note This data set is released under the Database Contents License (DbCL) v1.0.
+#' @source \url{https://www.kaggle.com/datasets/selfishgene/historical-hourly-weather-data}
+"us_cities_temperature_list"
+
 
 #' Sin-Cos data set generator. This function generates a set of sine and cosine
 #' time series. This function is used as example of the package application.
