@@ -13,7 +13,7 @@ net_knn_approx(D, k, ...)
 \item{k}{(Integer) k nearest-nearest neighbors where each time series
 will be connected to}
 
-\item{...}{Other parameters to kNN() function from dbscan package.}
+\item{...}{Other parameters to [dbscan::kNN()] function from dbscan package.}
 }
 \value{
 Approximated k nearest-neighbor network

@@ -5,7 +5,7 @@
 #'     or equal to epsilon become 1.
 #' @param treat_NA_as A numeric value, usually 1, that represent NA values in the
 #'     distance matrix
-#' @param is_dist_symetric Boolean, TRUE (default) if dist is symmetric
+#' @param directed Boolean, directed or undirected (default) network.
 #' @param weighted Boolean, TRUE will create a weighted network
 #' @param invert_dist_as_weight Boolean, if weighted == TRUE, then the weights
 #'     become 1 - distance. This is the default behavior since most network
@@ -15,8 +15,8 @@
 #'
 #' @return a igraph network
 #' @export
-net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=TRUE,
-                               weighted=FALSE, invert_dist_as_weight = TRUE, add_col_rownames=TRUE) {
+net_enn <- function(D, eps, treat_NA_as=1, directed=FALSE, weighted=FALSE,
+                    invert_dist_as_weight = TRUE, add_col_rownames=TRUE) {
     nas = is.na(D)
     if (length(which(nas)) > 0)
         D[nas] = treat_NA_as
@@ -40,9 +40,10 @@ net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=TRUE,
     net_weighted = NULL
     if (weighted)
         net_weighted = TRUE
-    graph.adjacency(n, mode=ifelse(is_dist_symetric, "undirected", "directed"),
+    graph.adjacency(n, mode=ifelse(directed, "directed", "undirected"),
                     weighted = net_weighted, diag=FALSE)
 }
+
 
 #' Construct an approximated epsilon neighbor network (faster, but
 #' approximated) from a distance matrix. Some actual nearest neighbors
@@ -51,7 +52,7 @@ net_enn <- function(D, eps, treat_NA_as=1, is_dist_symetric=TRUE,
 #' @param D Distance matrix
 #' @param eps (Integer) k nearest-nearest neighbors where each time series
 #' will be connected to
-#' @param ... Other parameters to frNN() function from dbscan package.
+#' @param ... Other parameters to [dbscan::frNN()] function from dbscan package.
 #'
 #' @importFrom dbscan frNN
 #' @return Approximated epsilon nearest-neighbor network
@@ -108,13 +109,14 @@ net_knn <- function(D, k, num_cores=1) {
     simplify(net)
 }
 
+
 #' Construct an approximated knn-network (faster, but approximated) from
 #' a distance matrix.
 #'
 #' @param D Distance matrix
 #' @param k (Integer) k nearest-nearest neighbors where each time series
 #' will be connected to
-#' @param ... Other parameters to kNN() function from dbscan package.
+#' @param ... Other parameters to [dbscan::kNN()] function from dbscan package.
 #'
 #' @return Approximated k nearest-neighbor network
 #' @importFrom dbscan kNN
@@ -127,4 +129,24 @@ net_knn_approx <- function(D, k, ...) {
     net = graph_from_adj_list(link_list, mode="all", duplicate = FALSE)
     V(net)$name = colnames(D)
     simplify(net)
+}
+
+
+#' Construct a network with significant links.
+#'
+#' Some time series distance functions in ts2net return 0 when the the two
+#' time series are statistically similar or 1 otherwise. This function is
+#' a wrapper for the [net_enn()] function that construct networks from a
+#' binary distance matrix (0 means statistical similar).
+#'
+#' @param D Distance matrix
+#' @param directed Boolean, directed or undirected (default) network.
+#' @param add_col_rownames Boolean. If TRUE (default), it uses the column and row
+#'     names from dist matrix as node labels.
+#'
+#' @return
+#' @export
+net_significant_links <- function(D, directed=FALSE, add_col_rownames=TRUE) {
+    net_enn(D, eps = 0, treat_NA_as = 1, directed = directed,
+            weighted = FALSE, add_col_rownames = add_col_rownames)
 }

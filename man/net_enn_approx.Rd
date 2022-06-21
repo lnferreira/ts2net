@@ -14,7 +14,7 @@ net_enn_approx(D, eps, ...)
 \item{eps}{(Integer) k nearest-nearest neighbors where each time series
 will be connected to}
 
-\item{...}{Other parameters to frNN() function from dbscan package.}
+\item{...}{Other parameters to [dbscan::frNN()] function from dbscan package.}
 }
 \value{
 Approximated epsilon nearest-neighbor network

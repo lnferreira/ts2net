@@ -50,3 +50,15 @@ test_that("Create weighted full network", {
 })
 
 
+test_that("Create network with significant links", {
+    ts_list = dataset_sincos_generate(num_sin_series = 5, num_cos_series = 5,
+                                      ts_length = 100, jitter_amount = 0.001)
+    D = ts_dist(ts_list, dist_func = tsdist_cor, sig_test=TRUE)
+    net = net_significant_links(D)
+    expect_true(all(D[1:5,1:5] == 0))
+    expect_true(all(D[6:10,6:10] == 0))
+    expect_true(all(D[1:5,6:10] == 1))
+    expect_true(all(D[6:10,1:5] == 1))
+    expect_equal(components(net)$no, 2)
+})
+

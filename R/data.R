@@ -4,7 +4,7 @@
 #' was adapted from the original and considers only cities in the US. Data was grouped by
 #' month (mean value) and removed days with missing data.
 #'
-#' @format A data frame with 61 rows and 28 variables. Each collumn (except date),
+#' @format A data frame with 61 rows and 28 variables. Each column (except date),
 #'   correspond to the mean temperature values (ºC) for each city.
 #' @docType data
 #' @keywords dataset

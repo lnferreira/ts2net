@@ -8,7 +8,7 @@ net_enn(
   D,
   eps,
   treat_NA_as = 1,
-  is_dist_symetric = TRUE,
+  directed = FALSE,
   weighted = FALSE,
   invert_dist_as_weight = TRUE,
   add_col_rownames = TRUE
@@ -23,7 +23,7 @@ or equal to epsilon become 1.}
 \item{treat_NA_as}{A numeric value, usually 1, that represent NA values in the
 distance matrix}
 
-\item{is_dist_symetric}{Boolean, TRUE (default) if dist is symmetric}
+\item{directed}{Boolean, directed or undirected (default) network.}
 
 \item{weighted}{Boolean, TRUE will create a weighted network}
 

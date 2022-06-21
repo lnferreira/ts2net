@@ -75,6 +75,7 @@ Multiple time series into a network:
 - `net_enn()`: &epsilon;-NN
 - `net_enn_approx()`: &epsilon;-NN. Faster, but may omit some nearest neighbors.
 - `net_weighted()`: Full weighted network
+- `net_significant_links()`: Creates a network from a binary distance matrix (0 means significant links).
 
 ### A single time series as a network
 

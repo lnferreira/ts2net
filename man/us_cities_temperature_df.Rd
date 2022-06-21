@@ -5,7 +5,7 @@
 \alias{us_cities_temperature_df}
 \title{Monthly temperatures in 27 US cities.}
 \format{
-A data frame with 61 rows and 28 variables. Each collumn (except date),
+A data frame with 61 rows and 28 variables. Each column (except date),
   correspond to the mean temperature values (ºC) for each city.
 }
 \source{
