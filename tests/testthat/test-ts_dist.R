@@ -146,3 +146,19 @@ test_that("van Rossum distance", {
     expect_equal(tsdist_vr(ets_sin, ets_cos, sig_test = TRUE, reps = 30), 1)
     expect_equal(tsdist_vr(ets_sin, ets_sin, sig_test = TRUE, reps = 40), 0)
 })
+
+
+test_that("Quantile networks", {
+    ts_lenth = 100
+    ts_list = dataset_sincos_generate(num_sin_series = 1, num_cos_series = 1,
+                                      ts_length = ts_lenth, jitter_amount = 0.01)
+    num_breaks = 10
+    ts_sin = ts_list[[1]]
+    net_qn_sum = tsnet_qn(ts_sin, num_breaks, weighs_as_prob = FALSE)
+    net_qn_probs = tsnet_qn(ts_sin, num_breaks, weighs_as_prob = TRUE)
+    sum_probs_by_node = round(apply(get.adjacency(net_qn_probs, attr = "weight"), 1, sum), digits = 2)
+    expect_equal(vcount(net_qn_sum), num_breaks)
+    expect_equal(vcount(net_qn_probs), num_breaks)
+    expect_true(sum(E(net_qn_sum)$weight) == ts_lenth - 1)
+    expect_true(all(sum_probs_by_node == 1))
+})

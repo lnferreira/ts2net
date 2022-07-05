@@ -25,7 +25,7 @@ net_enn <- function(D, eps, treat_NA_as=1, directed=FALSE, weighted=FALSE,
         if (invert_dist_as_weight) {
             if(any(D > 1))
                 stop("When invert_dist_as_weight is TRUE, the edge weight is 1 - d. In this case,
-                     all values in the distance matrix D should be in the interval [0,1]. ")
+                     all values in the distance matrix D should be in the interval [0,1].")
             n[D <= eps] = 1 - D[D <= eps]
         } else {
             n[D <= eps] = D[D <= eps]

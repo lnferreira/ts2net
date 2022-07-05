@@ -24,7 +24,8 @@ will be use to construct the Takens' vectors.}
 
 \item{do.plot}{Boolean. Show recurrence plot (default = FALSE)}
 
-\item{...}{Other parameters to `rqa()` from \pkg{nonlinearTseries}}
+\item{...}{Other parameters to \link[nonlinearTseries]{rqa}
+function from \pkg{nonlinearTseries} package.}
 }
 \value{
 recurrence network

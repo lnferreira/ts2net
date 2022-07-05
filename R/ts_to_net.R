@@ -66,7 +66,8 @@ tsnet_vg <- function(x, method=c("nvg", "hvg"), limit=+Inf, num_cores=1) {
 #' @param time.lag Integer denoting the number of time steps that
 #'   will be use to construct the Takens' vectors.
 #' @param do.plot Boolean. Show recurrence plot (default = FALSE)
- #' @param ... Other parameters to `rqa()` from \pkg{nonlinearTseries}
+ #' @param ... Other parameters to \link[nonlinearTseries]{rqa}
+ #'  function from \pkg{nonlinearTseries} package.
 #'
 #' @return recurrence network
 #' @importFrom nonlinearTseries rqa estimateEmbeddingDim
@@ -83,4 +84,35 @@ tsnet_rn <- function(x, radius, embedding.dim, time.lag=1, do.plot = FALSE, ...)
     net$time_lag = time.lag
     net$radius = radius
     simplify(net)
+}
+
+#' Construct a quantile network from a time series.
+#'
+#' @param x Array. Time series
+#' @param breaks The breaks used to find the intervals. It can be either
+#'    an integer defining the number of breaks (automatically found) or
+#'    an array of real values defining the breaks. To check the intervals
+#'    used, see the nodes' `range` attribute using \link[igraph]{get.vertex.attribute}
+#'      See \link[base]{cut} function for more details.
+#' @param weighs_as_prob Boolean. If TRUE (default), return the transition
+#'    probabilities as in a markov chain. Otherwise, returns the counts
+#'    each transition appears.
+#' @param remove_loops Boolean. If TRUE, remove loops.
+#' @param ... Additional parameters to \link[base]{cut} function.
+#'
+#' @return quantile network
+#' @export
+tsnet_qn <- function(x, breaks, weighs_as_prob = TRUE, remove_loops = FALSE, ...) {
+    ts_intervals = cut(x, breaks=breaks, ...)
+    edge_list = cbind(head(ts_intervals, -1), tail(ts_intervals, -1))
+    net = graph_from_edgelist(edge_list)
+    E(net)$weight = 1
+    net = igraph::simplify(net, edge.attr.comb="sum", remove.loops = remove_loops)
+    if (weighs_as_prob) {
+        A = get.adjacency(net, attr = "weight")
+        transition_probs = A / apply(A, 1, sum)
+        net = graph_from_adjacency_matrix(transition_probs, weighted = TRUE)
+    }
+    V(net)$range = levels(ts_intervals)
+    net
 }

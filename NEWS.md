@@ -1,6 +1,7 @@
 
 # ts2net 0.2.0
 
+* Adding tsnet_qn() function to construct quantile networks from time series.
 * Renamed function dist_file_parts_merge() to dist_parts_file_merge()
 * Added data set with the monthly temperature for 27 US cities from 2012 to 2017. A data frame us_cities_temperature_df and a list us_cities_temperature_list.
 * The parameter is_dist_symetric=TRUE was changed to directed=FALSE. 

@@ -93,7 +93,8 @@ One time series into a network:
 
 - `ts_to_windows()`: Extracts time windows that can be used to construct networks using the same approach used for multiple ones (Fig 1.).
 - `tsnet_vg()`: Natural and horizontal visibility graphs.
-- `tsnet_rn()`: recurrence networks.
+- `tsnet_rn()`: Recurrence networks.
+- `tsnet_qn()`: Transition (quantile) networks.
 
 ## License
 
