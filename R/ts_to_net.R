@@ -110,7 +110,9 @@ tsnet_qn <- function(x, breaks, weighs_as_prob = TRUE, remove_loops = FALSE, ...
     net = igraph::simplify(net, edge.attr.comb="sum", remove.loops = remove_loops)
     if (weighs_as_prob) {
         A = get.adjacency(net, attr = "weight")
-        transition_probs = A / apply(A, 1, sum)
+        transitions_sum = apply(A, 1, sum)
+        transitions_sum[transitions_sum == 0] = +Inf
+        transition_probs = A / transitions_sum
         net = graph_from_adjacency_matrix(transition_probs, weighted = TRUE)
     }
     V(net)$range = levels(ts_intervals)
