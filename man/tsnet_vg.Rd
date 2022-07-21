@@ -4,13 +4,22 @@
 \alias{tsnet_vg}
 \title{Construct the visibility graph from a time series}
 \usage{
-tsnet_vg(x, method = c("nvg", "hvg"), limit = +Inf, num_cores = 1)
+tsnet_vg(
+  x,
+  method = c("nvg", "hvg"),
+  directed = FALSE,
+  limit = +Inf,
+  num_cores = 1
+)
 }
 \arguments{
 \item{x}{Array. Time series}
 
 \item{method}{String. Construction method: "nvg" (default) for
 Natural visibility graph, "hvg" horizontal visibility graph.}
+
+\item{directed}{Boolean. If true, returns a directed graph where
+link direction show the temporal order.}
 
 \item{limit}{Positive integer. The maximum temporal distance (indexes)
 allowed in the visibility. This parameter limits the max visibility.}
@@ -21,5 +30,5 @@ allowed in the visibility. This parameter limits the max visibility.}
 visibility graph
 }
 \description{
-TODO: weights
+Construct the visibility graph from a time series
 }
