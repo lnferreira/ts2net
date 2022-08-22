@@ -30,25 +30,20 @@ The `ts2net` package provides two modelling approaches: one or a set of time ser
 
 ### A set of time series as a network
 
-The first modeling approach consists on transforming a set of time series into a network. This transformation typically involves the distance calculation for every pair of time series, represented by the distance matrix _D_. Then, _D_ is transformed into a network using strategies such as _k_ nearest neighbors, &epsilon; neighborhood, or complete weighted graph. The following example shows how to calculate all pairs of distances (_D_) and construct a _k_ nearest neighbor network (_k_-NN) using a toy data set composed by five sines and five cosines series (with noise):
+The first modeling approach consists on transforming a set of time series into a network. This transformation typically involves the distance calculation for every pair of time series, represented by the distance matrix _D_. Then, _D_ is transformed into a network using strategies such as _k_ nearest neighbors, &epsilon; neighborhood, or complete weighted graph. The following example shows how to calculate all pairs of distances (_D_) and construct a _k_ nearest neighbor network (_k_-NN) using a data set composed of temperature of 27 cities in the US:
 
 ``` r
 library(ts2net)
-# Generating a toy data set
-ts_dataset = dataset_sincos_generate(num_sin_series = 10, num_cos_series = 10,
-                                     ts_length = 100, jitter_amount = 0.25)
-# Pairwise distance calculation
-D = ts_dist(ts_dataset) 
-# epsilon-NN network construction
-ennet = net_enn(D, epsilon = 0.5)
-# k-NN network construction
-knnet = net_knn(D, k = 2)
-# weighted network construction
-wnet = net_weighted(D)
+# Calculating the distance matrix
+D <- ts_dist(us_cities_temperature_list, dist_func = tsdist_dtw)
+# Finding the epsilon that corresponds to 30% of the shortest distances
+eps <- dist_percentile(D, percentile = 0.3)
+# Constructing a &epsilon;-NN network
+net <- net_enn(D, eps)
 ```
 
-![Time series to network](inst/figs/fig01_black.jpg#gh-dark-mode-only)![Time series to network](inst/figs/fig01.jpg#gh-light-mode-only)
-**Fig. 1:** Transforming a time series data set into a network. (a) A toy data set composed by 10 sine and 10 cosine time series. A small white noise was added to each series. (b) Positive correlation distance calculated for the sin-cos data set. (c) The &epsilon;-NN network using &epsilon; = 0.5. (d) The _k_-NN network using _k_ = 2. (e) The weighted network with edges thickness proportional to the weight. Node colors represent the two classes (sine and cosines).
+![Multiple time series as networks](inst/figs/fig07_black.png#gh-dark-mode-only)![Multiple time series as networks](inst/figs/fig07.png#gh-light-mode-only)
+**Fig. 1:** Transforming time series into a network using ts2net. (a) The historical temperature of 27 cities in the US. (b) The distance matrix _D_ (normalized DTW) for the data set. (c) The &epsilon;-NN network was constructed using 30% of the shortest distances. Node colors represent communities.
 
 Functions to calculate the distance matrix:
 
@@ -94,8 +89,8 @@ net_rn = tsnet_rn(co2_ts, radius = 5)
 net_qn = tsnet_qn(ds$y, breaks = 100)
 ```
 
-![Visibility graphs](inst/figs/fig08_black.png#gh-dark-mode-only)![Visibility graphs](inst/figs/fig08.png#gh-light-mode-only)
-**Fig. 2:** (a) The CO$_{2}$ concentration time series. (b) Proximity network with time window 12 and one-value step. (c) Natural visibility graph. (d) Recurrence network ($\epsilon = 5$). (e) Transition (quantile) network (100 equally-spaced bins). Node colors represent temporal order (yellow to blue), except in the transition network where colors represent the sequence of lower (yellow) to higher (blue) bins.).
+![Single time series as networks](inst/figs/fig08_black.png#gh-dark-mode-only)![Single time series as networks](inst/figs/fig08.png#gh-light-mode-only)
+**Fig. 2:** (a) CO<sub>2</sub> concentration time series. (b) Proximity network with time window 12 and one-value step. (c) Natural visibility graph. (d) Recurrence network (&epsilon; = 5). (e) Transition (quantile) network (100 equally-spaced bins). Node colors represent temporal order (yellow to blue), except in the transition network where colors represent the sequence of lower (yellow) to higher (purple) bins.).
 
 One time series into a network:
 
