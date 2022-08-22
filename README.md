@@ -3,7 +3,6 @@
 [![R-CMD-check](https://github.com/lnferreira/ts2net/workflows/R-CMD-check/badge.svg)](https://github.com/lnferreira/ts2net/actions)
 [![Codecov test coverage](https://codecov.io/gh/lnferreira/ts2net/branch/main/graph/badge.svg?token=KFSXU3IE7C)](https://app.codecov.io/gh/lnferreira/ts2net/)
 [![CRAN/METACRAN](https://img.shields.io/cran/v/ts2net?color=blue)](https://cran.r-project.org/package=ts2net)
-[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ts2net?color=yellow)](https://cran.r-project.org/package=ts2net)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/lnferreira/ts2net/blob/main/LICENSE.md)
 
 ```ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can transformed into a networks and analyzed using network science and graph mining tools.
@@ -79,15 +78,24 @@ Multiple time series into a network:
 
 ### A single time series as a network
 
-The second approach consists on transform a single time series into a network. The most straightforward method to perform this transformation consists on breaking the time series into time windows and use the same approach described for multiple time series. Other methods, such as visibility graphs or recurrence networks, can also be used. The following example show how to transform a single time series _X_ into a visibility graph:
+The second approach consists on transform a single time series into a network. The following example shows how to transform a time series of CO<sub>2</sub> emission into a proximity network, a visibility graph, a recurrence network, and a transition network:
 
 ``` r
-X = c(10, 5, 2.1, 4.1, 1, 7, 10)
-net_vg = tsnet_vg(X)
+co2_ts = as.numeric(co2)
+# 1. Proximity (correlation) network
+co2_windows = ts_to_windows(co2_ts, 12, 1)
+D = ts_dist(ds_list, cor_type = "+")
+net_p = net_enn(D, eps = 0.25)
+# 2. Visibility graph
+net_vg = tsnet_vg(co2_ts)
+# 3. Recurrence network
+net_rn = tsnet_rn(co2_ts, radius = 5)
+# 4. Transition (quantile) network
+net_qn = tsnet_qn(ds$y, breaks = 100)
 ```
 
-![Visibility graphs](inst/figs/fig06_black.jpg#gh-dark-mode-only)![Visibility graphs](inst/figs/fig06.jpg#gh-light-mode-only)
-**Fig. 2:** Visibility graph construction. (a and c) The example time series _X_ with values represented by the bars and points. Gray lines connect ``visible'' values as defined in the (a) natural (red) and (c) horizontal (blue) visibility graphs. The resulting natural (b) and horizontal (d) visibility graphs.).
+![Visibility graphs](inst/figs/fig08_black.png#gh-dark-mode-only)![Visibility graphs](inst/figs/fig08.png#gh-light-mode-only)
+**Fig. 2:** (a) The CO$_{2}$ concentration time series. (b) Proximity network with time window 12 and one-value step. (c) Natural visibility graph. (d) Recurrence network ($\epsilon = 5$). (e) Transition (quantile) network (100 equally-spaced bins). Node colors represent temporal order (yellow to blue), except in the transition network where colors represent the sequence of lower (yellow) to higher (blue) bins.).
 
 One time series into a network:
 
