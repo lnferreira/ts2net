@@ -5,7 +5,7 @@
 [![CRAN/METACRAN](https://img.shields.io/cran/v/ts2net?color=blue)](https://cran.r-project.org/package=ts2net)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/lnferreira/ts2net/blob/main/LICENSE.md)
 
-```ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can transformed into a networks and analyzed using network science and graph mining tools.
+```ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can be transformed into networks and analyzed using network science and graph mining tools.
 
 ***THIS IS A BETA VERSION - Please report bugs [HERE](https://github.com/lnferreira/ts2net/issues)*** 
 
@@ -30,7 +30,7 @@ The `ts2net` package provides two modelling approaches: one or a set of time ser
 
 ### A set of time series as a network
 
-The first modeling approach consists on transforming a set of time series into a network. This transformation typically involves the distance calculation for every pair of time series, represented by the distance matrix _D_. Then, _D_ is transformed into a network using strategies such as _k_ nearest neighbors, &epsilon; neighborhood, or complete weighted graph. The following example shows how to calculate all pairs of distances (_D_) and construct a _k_ nearest neighbor network (_k_-NN) using a data set composed of temperature of 27 cities in the US:
+The first modeling approach consists of transforming a set of time series into a network. This transformation typically involves the distance calculation for every pair of time series, represented by the distance matrix _D_. Then, _D_ is transformed into a network using strategies such as _k_ nearest neighbors, &epsilon; nearest neighbors, or complete weighted graphs. The following example shows how to calculate all pairs of distances (_D_) and construct a &epsilon; nearest neighbor network (&epsilon;-NN) using a data set composed of the temperature variations in 27 cities in the US:
 
 ``` r
 library(ts2net)
@@ -38,7 +38,7 @@ library(ts2net)
 D <- ts_dist(us_cities_temperature_list, dist_func = tsdist_dtw)
 # Finding the epsilon that corresponds to 30% of the shortest distances
 eps <- dist_percentile(D, percentile = 0.3)
-# Constructing a &epsilon;-NN network
+# Constructing the network
 net <- net_enn(D, eps)
 ```
 
@@ -73,7 +73,7 @@ Multiple time series into a network:
 
 ### A single time series as a network
 
-The second approach consists on transform a single time series into a network. The following example shows how to transform a time series of CO<sub>2</sub> emission into a proximity network, a visibility graph, a recurrence network, and a transition network:
+The second approach consists of transforming a single time series into a network. The following example shows how to transform a time series of CO<sub>2</sub> emissions into a proximity network, a visibility graph, a recurrence network, and a transition network:
 
 ``` r
 co2_ts = as.numeric(co2)
