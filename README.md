@@ -9,6 +9,25 @@
 
 ***THIS IS A BETA VERSION - Please report bugs [HERE](https://github.com/lnferreira/ts2net/issues)*** 
 
+## Reference
+
+For details about this package, check the preprint published on arXiv:
+
+> ***[Leonardo N. Ferreira, From Time Series to Networks in R with the ts2net Package (2022)](https://arxiv.org/abs/2208.09660)***
+
+***Please cite this paper if you used ```ts2net``` in a publication:***
+
+``` 
+@misc{ferreira22,
+  title = {From Time Series to Networks in R with the ts2net Package},
+  author = {Ferreira, Leonardo N.},
+  doi = {10.48550/ARXIV.2208.09660},
+  url = {https://arxiv.org/abs/2208.09660},
+  publisher = {arXiv},
+  year = {2022}
+}
+```
+
 ## Installation
 
 From CRAN:
@@ -78,15 +97,15 @@ The second approach consists of transforming a single time series into a network
 ``` r
 co2_ts = as.numeric(co2)
 # 1. Proximity (correlation) network
-co2_windows = ts_to_windows(co2_ts, 12, 1)
-D = ts_dist(co2_windows, cor_type = "+")
-net_p = net_enn(D, eps = 0.25)
+co2_windows <- ts_to_windows(co2_ts, 12, 1)
+D <- ts_dist(co2_windows, cor_type = "+")
+net_p <- net_enn(D, eps = 0.25)
 # 2. Visibility graph
-net_vg = tsnet_vg(co2_ts)
+net_vg <- tsnet_vg(co2_ts)
 # 3. Recurrence network
-net_rn = tsnet_rn(co2_ts, radius = 5)
+net_rn <- tsnet_rn(co2_ts, radius = 5)
 # 4. Transition (quantile) network
-net_qn = tsnet_qn(co2_ts, breaks = 100)
+net_qn <- tsnet_qn(co2_ts, breaks = 100)
 ```
 
 ![Single time series as networks](inst/figs/fig08_black.png#gh-dark-mode-only)![Single time series as networks](inst/figs/fig08.png#gh-light-mode-only)
