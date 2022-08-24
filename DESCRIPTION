@@ -37,4 +37,3 @@ Suggests:
     testthat (>= 3.0.0),
     rmarkdown
 Config/testthat/edition: 3
-VignetteBuilder: knitr
