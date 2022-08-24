@@ -7,7 +7,7 @@
 
 ```ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can be transformed into networks and analyzed using network science and graph mining tools.
 
-***THIS IS A BETA VERSION - Please report bugs [HERE](https://github.com/lnferreira/ts2net/issues)*** 
+**THIS IS A BETA VERSION - Please report bugs [HERE](https://github.com/lnferreira/ts2net/issues)**
 
 ## Reference
 
@@ -15,7 +15,7 @@ For details about this package, check the preprint published on arXiv:
 
 > ***[Leonardo N. Ferreira, From Time Series to Networks in R with the ts2net Package (2022)](https://arxiv.org/abs/2208.09660)***
 
-***Please cite this paper if you used ```ts2net``` in a publication:***
+**Please cite this paper if you used ```ts2net``` in a publication:**
 
 ``` 
 @misc{ferreira22,
@@ -49,16 +49,16 @@ The `ts2net` package provides two modelling approaches: one or a set of time ser
 
 ### A set of time series as a network
 
-The first modeling approach consists of transforming a set of time series into a network. This transformation typically involves the distance calculation for every pair of time series, represented by the distance matrix _D_. Then, _D_ is transformed into a network using strategies such as _k_ nearest neighbors, &epsilon; nearest neighbors, or complete weighted graphs. The following example shows how to calculate all pairs of distances (_D_) and construct a &epsilon; nearest neighbor network (&epsilon;-NN) using a data set composed of the temperature variations in 27 cities in the US:
+The first modeling approach consists of transforming a set of time series into a network. This transformation typically involves the distance calculation for every pair of time series, represented by the distance matrix _D_. Then, _D_ is transformed into a network using strategies such as _k_ nearest neighbors, &epsilon; nearest neighbors, or complete weighted graphs. The following example shows how to calculate all pairs of distances (_D_) and construct a &epsilon; nearest neighbor network (&epsilon;-NN) using a data set (available with `ts2net`) composed of the temperature variations in 27 cities in the US:
 
 ``` r
 library(ts2net)
 # Calculating the distance matrix
-D <- ts_dist(us_cities_temperature_list, dist_func = tsdist_dtw)
+D = ts_dist(us_cities_temperature_list, dist_func = tsdist_dtw)
 # Finding the epsilon that corresponds to 30% of the shortest distances
-eps <- dist_percentile(D, percentile = 0.3)
+eps = dist_percentile(D, percentile = 0.3)
 # Constructing the network
-net <- net_enn(D, eps)
+net = net_enn(D, eps)
 ```
 
 ![Multiple time series as networks](inst/figs/fig07_black.png#gh-dark-mode-only)![Multiple time series as networks](inst/figs/fig07.png#gh-light-mode-only)
@@ -92,24 +92,27 @@ Multiple time series into a network:
 
 ### A single time series as a network
 
-The second approach consists of transforming a single time series into a network. The following example shows how to transform a time series of CO<sub>2</sub> emissions into a proximity network, a visibility graph, a recurrence network, and a transition network:
+The second approach consists of transforming a single time series into a network. The following example shows how to transform a time series of monthly atmospheric concentration of carbon dioxide into a proximity network, a visibility graph, a recurrence network, and a transition network:
+
+
+The second approach consists of transforming a single time series into a network. The following example shows how to transform the time series of monthly atmospheric concentration of carbon dioxide (available by default in R) into a proximity network, a visibility graph, a recurrence network, and a transition network:
 
 ``` r
 co2_ts = as.numeric(co2)
 # 1. Proximity (correlation) network
-co2_windows <- ts_to_windows(co2_ts, 12, 1)
-D <- ts_dist(co2_windows, cor_type = "+")
-net_p <- net_enn(D, eps = 0.25)
+co2_windows = ts_to_windows(co2_ts, 12, 1)
+D = ts_dist(co2_windows, cor_type = "+")
+net_p = net_enn(D, eps = 0.25)
 # 2. Visibility graph
-net_vg <- tsnet_vg(co2_ts)
+net_vg = tsnet_vg(co2_ts)
 # 3. Recurrence network
-net_rn <- tsnet_rn(co2_ts, radius = 5)
+net_rn = tsnet_rn(co2_ts, radius = 5)
 # 4. Transition (quantile) network
-net_qn <- tsnet_qn(co2_ts, breaks = 100)
+net_qn = tsnet_qn(co2_ts, breaks = 100)
 ```
 
 ![Single time series as networks](inst/figs/fig08_black.png#gh-dark-mode-only)![Single time series as networks](inst/figs/fig08.png#gh-light-mode-only)
-**Fig. 2:** (a) CO<sub>2</sub> concentration time series. (b) Proximity network with time window 12 and one-value step. (c) Natural visibility graph. (d) Recurrence network (&epsilon; = 5). (e) Transition (quantile) network (100 equally-spaced bins). Node colors represent temporal order (yellow to blue), except in the transition network where colors represent the sequence of lower (yellow) to higher (purple) bins.).
+**Fig. 2:** (a) CO<sub>2</sub> concentration time series. (b) Proximity network with time window 12 and one-value step. (c) Natural visibility graph. (d) Recurrence network (&epsilon; = 5). (e) Transition (quantile) network (100 equally-spaced bins). Node colors represent temporal order (yellow to purple), except in the transition network where colors represent the sequence of lower (yellow) to higher (purple) bins.).
 
 One time series into a network:
 
