@@ -1,9 +1,25 @@
-# ts2net <img src="man/figures/logo.png" align="right" height="139" />
+---
+title: "ts2net"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ts2net}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-[![R-CMD-check](https://github.com/lnferreira/ts2net/workflows/R-CMD-check/badge.svg)](https://github.com/lnferreira/ts2net/actions)
-[![Codecov test coverage](https://codecov.io/gh/lnferreira/ts2net/branch/main/graph/badge.svg?token=KFSXU3IE7C)](https://app.codecov.io/gh/lnferreira/ts2net/)
-[![CRAN/METACRAN](https://img.shields.io/cran/v/ts2net?color=blue)](https://cran.r-project.org/package=ts2net)
-[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/lnferreira/ts2net/blob/main/LICENSE.md)
+```{css, echo=FALSE}
+img{border:0;}
+```
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+<img src="logo.png" align="right" height="139" />
 
 ```ts2net``` is an R package to transform one or multiple time series into networks. This transformation is useful to model and study complex systems, which are commonly represented by a set of time series extracted from the small parts that compose the system. In this case, the network represents time series by nodes that are linked if their respective time series are similar or associated. Network models can also be used for time series data mining. Single or multiple time series can be transformed into networks and analyzed using network science and graph mining tools.
 
@@ -28,21 +44,6 @@ For details about this package, check the preprint on arXiv:
 }
 ```
 
-## Installation
-
-From CRAN:
-
-``` r
-install.packages("ts2net")
-```
-
-The development version can be installed from GitHub using the function `install_github()` from either `devtools` or `remotes` packages:
-
-``` r
-install.packages("remotes") # if `remotes` package is not installed
-remotes::install_github("lnferreira/ts2net")
-```
-
 ## Usage
 
 The `ts2net` package provides two modelling approaches: one or a set of time series as a network.
@@ -51,9 +52,10 @@ The `ts2net` package provides two modelling approaches: one or a set of time ser
 
 The first modeling approach consists of transforming a set of time series into a network. This transformation typically involves the distance calculation for every pair of time series, represented by the distance matrix _D_. Then, _D_ is transformed into a network using strategies such as _k_ nearest neighbors, &epsilon; nearest neighbors, or complete weighted graphs. The following example shows how to calculate all pairs of distances (_D_) and construct a &epsilon; nearest neighbor network (&epsilon;-NN) using a data set (available with `ts2net`) composed of the temperature variations in 27 cities in the US:
 
+
 ``` r
 library(ts2net)
-# Calculating the distance matrix
+# Calculating the distance matrix using DTW
 D = ts_dist(us_cities_temperature_list, dist_func = tsdist_dtw)
 # Finding the epsilon that corresponds to 30% of the shortest distances
 eps = dist_percentile(D, percentile = 0.3)
@@ -61,8 +63,11 @@ eps = dist_percentile(D, percentile = 0.3)
 net = net_enn(D, eps)
 ```
 
-![Multiple time series as networks](inst/figs/fig07_black.png#gh-dark-mode-only)![Multiple time series as networks](inst/figs/fig07.png#gh-light-mode-only)
-**Fig. 1:** Transforming time series into a network using ts2net. (a) The historical temperature of 27 cities in the US. (b) The distance matrix _D_ (normalized DTW) for the data set. (c) The &epsilon;-NN network was constructed using 30% of the shortest distances. Node colors represent communities.
+
+```{r, echo=FALSE, out.width = '100%', fig.align="left", fig.cap="**Fig. 1:** Transforming time series into a network using ts2net. (a) The historical temperature of 27 cities in the US. (b) The distance matrix _D_ (normalized DTW) for the data set. (c) The &epsilon;-NN network was constructed using 30% of the shortest distances. Node colors represent communities."}
+knitr::include_graphics("fig07.png")
+```
+
 
 Functions to calculate the distance matrix:
 
@@ -94,7 +99,6 @@ Methods to transform **multiple** time series into a network:
 
 The second approach consists of transforming a single time series into a network. The following example shows how to transform a time series of monthly atmospheric concentration of carbon dioxide into a proximity network, a visibility graph, a recurrence network, and a transition network:
 
-
 The second approach consists of transforming a single time series into a network. The following example shows how to transform the time series of monthly atmospheric concentration of carbon dioxide (available by default in R) into a proximity network, a visibility graph, a recurrence network, and a transition network:
 
 ``` r
@@ -111,8 +115,9 @@ net_rn = tsnet_rn(co2_ts, radius = 5)
 net_qn = tsnet_qn(co2_ts, breaks = 100)
 ```
 
-![Single time series as networks](inst/figs/fig08_black.png#gh-dark-mode-only)![Single time series as networks](inst/figs/fig08.png#gh-light-mode-only)
-**Fig. 2:** (a) CO<sub>2</sub> concentration time series. (b) Proximity network with time window 12 and one-value step. (c) Natural visibility graph. (d) Recurrence network (&epsilon; = 5). (e) Transition (quantile) network (100 equally-spaced bins). Node colors represent temporal order (yellow to purple), except in the transition network where colors represent the sequence of lower (yellow) to higher (purple) bins.).
+```{r, echo=FALSE, out.width = '100%', fig.align="left", fig.cap="**Fig. 2:** (a) CO<sub>2</sub> concentration time series. (b) Proximity network with time window 12 and one-value step. (c) Natural visibility graph. (d) Recurrence network (&epsilon; = 5). (e) Transition (quantile) network (100 equally-spaced bins). Node colors represent temporal order (yellow to purple), except in the transition network where colors represent the sequence of lower (yellow) to higher (purple) bins."}
+knitr::include_graphics("fig08.png")
+```
 
 Methods to transform **one** time series into a network:
 
@@ -121,13 +126,17 @@ Methods to transform **one** time series into a network:
 - `tsnet_rn()`: Recurrence networks.
 - `tsnet_qn()`: Transition (quantile) networks.
 
+## Source code
+
+[https://github.com/lnferreira/ts2net](https://github.com/lnferreira/ts2net)
+
 ## License
 
 ```ts2net``` is distributed under the [MIT license](https://github.com/lnferreira/ts2net/blob/main/LICENSE.md).
 
 ## Bugs
 
-Found an issue :bomb: or a bug :bug: ? Please report it [Here](https://github.com/lnferreira/ts2net/issues). 
+Found an issue or a bug? Please report it [Here](https://github.com/lnferreira/ts2net/issues). 
 
 ## Suggestions
 
@@ -138,3 +147,4 @@ Do you have suggestions of improvements or new features? Please add them [here](
 Leonardo N. Ferreira  
 [leonardoferreira.com](https://www.leonardoferreira.com/)  
 ferreira@leonardonascimento.com
+
