@@ -11,20 +11,25 @@
 
 ## Reference
 
-For details about this package, check the preprint on arXiv:
+For details about this package, check out the paper:
 
-> ***[Leonardo N. Ferreira, From Time Series to Networks in R with the ts2net Package (2022)](https://arxiv.org/abs/2208.09660)***
+> ***[Leonardo N. Ferreira, From Time Series to Networks in R with the ts2net Package (2022)](https://doi.org/10.1007/s41109-024-00642-2)***
 
 **Please cite this paper if you used ```ts2net``` in a publication:**
 
 ``` 
-@misc{ferreira22,
-  title = {From Time Series to Networks in R with the ts2net Package},
-  author = {Ferreira, Leonardo N.},
-  doi = {10.48550/ARXIV.2208.09660},
-  url = {https://arxiv.org/abs/2208.09660},
-  publisher = {arXiv},
-  year = {2022}
+@article{ferreira24,
+	author = {Ferreira, Leonardo N.},
+	date = {2024/07/08},
+	doi = {10.1007/s41109-024-00642-2},
+	isbn = {2364-8228},
+	journal = {Applied Network Science},
+	number = {1},
+	pages = {32},
+	title = {From time series to networks in R with the ts2net package},
+	url = {https://doi.org/10.1007/s41109-024-00642-2},
+	volume = {9},
+	year = {2024}
 }
 ```
 
