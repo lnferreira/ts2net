@@ -13,7 +13,7 @@
 
 For details about this package, check out the paper:
 
-> ***[Leonardo N. Ferreira, From Time Series to Networks in R with the ts2net Package (2024)](https://doi.org/10.1007/s41109-024-00642-2)***
+> ***[From Time Series to Networks in R with the ts2net Package](https://doi.org/10.1007/s41109-024-00642-2)***
 
 **Please cite this paper if you used ```ts2net``` in a publication:**
 
